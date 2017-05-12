@@ -1,0 +1,32 @@
+{
+  "compileOnSave": false,
+  "buildOnSave": false,
+  "compilerOptions": {
+    "outDir": "./dist/",
+    "target": "es2017",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "jsx": "react",
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "noEmitOnError": true,
+    "alwaysStrict": true,
+    "importHelpers": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "lib": [
+      "dom",
+      "es5",
+      "es2015.iterable",
+      "es2015.promise",
+      "es2015.symbol",
+      "es2017.object"
+    ]
+  },
+  "files": [
+    "./src/app.tsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
