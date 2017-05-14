@@ -1,0 +1,113 @@
+@mixin transition($transition...) {
+    -moz-transition:    $transition;
+    -o-transition:      $transition;
+    -webkit-transition: $transition;
+    transition:         $transition;
+}
+
+.container {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
+  font-size: 18px;
+  color: #776e65;
+
+  header {
+    text-align: center;
+    width: 100%;
+    margin-bottom: 5px;
+
+    button {
+      margin: 5px 5px 0 0;
+    }
+
+    .score {
+      cursor: default;
+    }
+  }
+
+  .play {
+    margin: 10px;
+    width: 90%;
+  }
+
+  .content {
+    margin: auto;
+    width: 100vh;
+    max-width: 100%;
+
+    .game_container {
+      margin: auto;
+      background: #bbada0;
+
+      .v0 { color: #776e65; background: #cdc1b4; }
+      .v2 { color: #776e65; background: #eee4da; }
+      .v4 { color: #776e65; background: #ede0c8; }
+      .v8 { color: #f9f6f2; background: #f2b179; }
+      .v16 { color: #f9f6f2; background: #f59563; }
+      .v32 { color: #f9f6f2; background: #f67c5f; }
+      .v64 { color: #f9f6f2; background: #f65e3b; }
+      .v128 { color: #f9f6f2; background: #edcf72; }
+      .v256 { color: #f9f6f2; background: #edcc61; }
+      .v512 { color: #f9f6f2; background: #edc850; }
+      .v1024 { color: #f9f6f2; background: #edc53f; }
+      .v2048 { color: #f9f6f2; background: #edc22e; }
+    }
+  }
+
+  .field {
+    overflow: hidden;
+    text-align: center;
+    font-weight: bold;
+  }
+
+  .row {
+    margin: 0 0 0 0;
+  }
+
+  @media all and (orientation:landscape) {
+    .game_container {
+      width: 80vh;
+      height: 80vh;
+      border-radius: 0.96vh;
+    }
+
+    .field {
+      width: 17vh;
+      height: 17vh;
+      line-height: 17vh;
+      margin: 2.4vh 0 0 2.4vh;
+      font-size: 8.8vh;
+      border-radius: 0.48vh;
+    }
+    .v128 { font-size: 7.2vh }
+    .v256 { font-size: 7.2vh }
+    .v512 { font-size: 7.2vh }
+    .v1024 { font-size: 5.6vh }
+    .v2048 { font-size: 5.6vh }
+  }
+
+  @media all and (orientation:portrait) {
+    .game_container {
+      width: 100vw;
+      height: 100vw;
+      border-radius: 1.2vw;
+    }
+
+    .field {
+      width: 21.25vw;
+      height: 21.25vw;
+      line-height: 21.25vw;
+      margin: 3vw 0 0 3vw;
+      font-size: 11vw;
+      border-radius: 0.6vw;
+    }
+    .v128 { font-size: 9vw }
+    .v256 { font-size: 9vw }
+    .v512 { font-size: 9vw }
+    .v1024 { font-size: 7vw }
+    .v2048 { font-size: 7vw }
+  }
+}
