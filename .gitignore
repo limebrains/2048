@@ -1,3 +1,9 @@
+# Pet
+
+.pet/bashrc
+.pet/zshrc
+.pet/*local*
+
 .idea
 
 # Created by https://www.gitignore.io/api/osx,node,jetbrains
