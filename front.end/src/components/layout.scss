@@ -41,6 +41,7 @@
     .game_container {
       margin: auto;
       background: #bbada0;
+      position: relative;
 
       .v0 { color: #776e65; background: #cdc1b4; }
       .v2 { color: #776e65; background: #eee4da; }
@@ -54,6 +55,18 @@
       .v512 { color: #f9f6f2; background: #edc850; }
       .v1024 { color: #f9f6f2; background: #edc53f; }
       .v2048 { color: #f9f6f2; background: #edc22e; }
+
+      .game_over {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(200, 200, 200, 0.5);
+        overflow: hidden;
+        text-align: center;
+        font-weight: bold;
+      }
     }
   }
 
@@ -87,6 +100,10 @@
     .v512 { font-size: 7.2vh }
     .v1024 { font-size: 5.6vh }
     .v2048 { font-size: 5.6vh }
+
+    .game_over {
+      line-height: 80vh;
+    }
   }
 
   @media all and (orientation:portrait) {
@@ -109,5 +126,9 @@
     .v512 { font-size: 9vw }
     .v1024 { font-size: 7vw }
     .v2048 { font-size: 7vw }
+
+    .game_over {
+      line-height: 100vw;
+    }
   }
 }

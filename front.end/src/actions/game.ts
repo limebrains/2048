@@ -22,8 +22,14 @@ export const newSquare = (game: any) => {
   return game;
 };
 
-export const start = () => {
-  let startingSetUp = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]];
+export const start = (size: number) => {
+  let startingSetUp: number[][] = [];
+  for (let i = 0; i < size; i++) {
+    startingSetUp.push([]);
+    for (let j = 0; j < size; j++) {
+      startingSetUp[i].push(0)
+    }
+  }
   startingSetUp = newSquare(newSquare(startingSetUp));
 
   return {

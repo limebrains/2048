@@ -10,17 +10,24 @@ interface IProps {
   dispatch: Function;
 }
 
+let size = 4;
 class GameLayout extends React.Component<IProps, {}> {
   public componentDidMount() {
-    this.props.dispatch(start());
+    this.props.dispatch(start(size));
     document.addEventListener('keyup', this.determineMove);
   }
   public render() {
+    let message: JSX.Element;
+    if (this.props.game.gameOver) {
+      message = (
+        <div className="game_over">GAME OVER</div>
+      );
+    }
     return (
       <div>
         <header>
           <ReactRouter.Link to="/" ><button className="btn btn-primary" >Home</button></ReactRouter.Link>
-          <button className="btn btn-warning" onClick={this.props.dispatch.bind(this, (start()))}>Restart</button>
+          <button className="btn btn-warning" onClick={this.props.dispatch.bind(this, (start(size)))}>Restart</button>
           <button className="btn btn-success disabled score" >{this.props.game.score}</button>
         </header>
         <div className="game_container">
@@ -33,6 +40,7 @@ class GameLayout extends React.Component<IProps, {}> {
               return (<div className={fieldClass}>{field}</div>);
             })}</div>);
           })}
+          { message }
         </div>
       </div>
     );

@@ -19,7 +19,17 @@ const initialState: IState = {
 };
 
 const isOver = (game: any): boolean => {
-  return false; // TODO
+  let size = game[0].length;
+  for (let row = 0; row < size; row++) {
+    for (let col = 0; col < size; col++) {
+      if (game[row][col] === 0
+        || ( col + 1 < size && game[row][col] === game[row][col + 1] )
+        || ( row + 1 < size && game[row][col] === game[row + 1][col] ) ) {
+        return false;
+      }
+    }
+  }
+  return true;
 };
 
 const compressLine = (line: number[]): [boolean, number[], number] => {
@@ -128,12 +138,14 @@ const game = (state = initialState, action: any) => {
         board: gameAfterMove[0],
         direction: action.payload,
         score: state.score + gameAfterMove[1],
+        gameOver: isOver(gameAfterMove[0]),
       };
     case START:
       return {
         ...state,
         board: action.payload,
         score: 0,
+        gameOver: false,
       };
     default:
       return state;
