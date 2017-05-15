@@ -56,9 +56,9 @@
     "yarn": ">=0.16.0"
   },
   "dependencies": {
-    "@types/lodash": "^4.14.64",
+    "@types/lodash": "^3.10.1",
     "bootstrap": "^4.0.0-alpha.6",
-    "lodash": "^4.17.4",
+    "lodash": "^3.10.1",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
     "react-redux": "^5.0.2",

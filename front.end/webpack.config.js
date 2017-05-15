@@ -35,10 +35,11 @@ module.exports = {
     extensions: ['.ts', '.tsx', '.js']
   },
   devServer: {
-    hotOnly: true,
+    hot: true,
     contentBase: 'assets/',
     host: '0.0.0.0',
-    port: 8000
+    port: 8000,
+    historyApiFallback: true,
   },
   module: {
     rules: [

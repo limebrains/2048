@@ -9,8 +9,8 @@ source /Users/pythonicninja/.pet/projects/2048/start.sh
 if [ -f "$project_root/start.local.exit.sh" ]; then
     source "$project_root/start.local.exit.sh"
 fi
-PS1="[2048 - run_backend_server] $PS1"
-echo -ne "\033]0;2048 - run_backend_server \007"
+PS1="[2048] $PS1"
+echo -ne "\033]0;2048 \007"
 if [ -z "$PET_PREV_TAB_NAME" ]; then
     tab_name_at_exit=""
 else
@@ -26,13 +26,4 @@ if [ -f "$project_root/stop.local.exit.sh" ]; then
 fi
 source /Users/pythonicninja/.pet/projects/2048/stop.sh' EXIT
 export PET_PREV_TAB_NAME='2048 '
-
-if [ -f "/Users/pythonicninja/.pet/projects/2048/tasks/run_backend_server.local.entry.sh" ]; then
-    source "/Users/pythonicninja/.pet/projects/2048/tasks/run_backend_server.local.entry.sh"
-fi
-. /Users/pythonicninja/.pet/projects/2048/tasks/run_backend_server.local.sh 
-if [ -f "/Users/pythonicninja/.pet/projects/2048/tasks/run_backend_server.local.exit.sh" ]; then
-    source "/Users/pythonicninja/.pet/projects/2048/tasks/run_backend_server.local.exit.sh"
-fi
-exit
 
