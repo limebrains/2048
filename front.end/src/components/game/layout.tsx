@@ -59,10 +59,10 @@ class GameLayout extends React.Component<IProps, {}> {
           </div>
           <div key="game_board" className="game_board">
             {this.props.game.board.map((field: IFIELD, index: number) => {
-                let fieldClass = `field v${field.value} game_grid_${field.row}_${field.col}_at_${cssSize}`;
+                let fieldClass = `field v${field.value}
+                 game_grid_${field.row + field.direction[1]}_${field.col + field.direction[0]}_at_${cssSize}`;
                 if (field.merged === 1) { fieldClass += ` merged`; }
                 if (field.born) { fieldClass += ` born`; }
-                if (field.direction) { fieldClass += ` direction_${field.direction[0]}_${field.direction[1]}`; }
                 return (
                   <div key={field.id} className={fieldClass} >{field.value}</div>
                 );
