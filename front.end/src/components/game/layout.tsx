@@ -63,7 +63,6 @@ class GameLayout extends React.Component<IProps, {}> {
                 if (field.merged === 1) { fieldClass += ` merged`; }
                 if (field.born) { fieldClass += ` born`; }
                 if (field.direction) { fieldClass += ` direction_${field.direction[0]}_${field.direction[1]}`; }
-                {/*onClick={this.animateTranslate}*/}
                 return (
                   <div key={field.id} className={fieldClass} >{field.value}</div>
                 );
@@ -102,9 +101,6 @@ class GameLayout extends React.Component<IProps, {}> {
         break;
     }
   }
-  // private animateTranslate = (e: any) => {
-  //   e.target.parentElement.className += ' move-to-top';
-  // }
 }
 
 const mapStateToProps = (state: any) => {

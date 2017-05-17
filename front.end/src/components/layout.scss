@@ -84,19 +84,19 @@ $portrait_size: 100vw;
     transform: scale(1); } }
 @keyframes appear {
   0% {
-    /* opacity: 0; */
-    /* -webkit-transform: scale(0); */
+    opacity: 0;
+    -webkit-transform: scale(0);
     -moz-transform: scale(0);
     -ms-transform: scale(0);
-    /* transform: scale(0); */
+    transform: scale(0);
     }
 
   100% {
-    /* opacity: 1; */
-    /* -webkit-transform: scale(1); */
+    opacity: 1;
+    -webkit-transform: scale(1);
     -moz-transform: scale(1);
     -ms-transform: scale(1);
-    /* transform: scale(1); */
+    transform: scale(1);
     } }
 
 @-webkit-keyframes pop {
@@ -154,18 +154,7 @@ $portrait_size: 100vw;
     -ms-transform: scale(1);
     transform: scale(1); } }
 
-.born {
-  @include animation(appear 200ms ease 100ms);
-}
-
-.merged {
-  z-index: 2;
-  @include animation(pop 200ms ease 100ms);
-}
-
 // fade-in - game_massage, appear, pop
-
-
 
 .container {
   margin: 0;
@@ -244,8 +233,8 @@ $portrait_size: 100vw;
     width: 21.25%;
     height: 21.25%;
     border-radius: 0.6%;
-    //@include transition-property(transform);
-    @include transition(all 200ms ease-in-out);
+    @include transition-property(transform);
+    @include transition(100ms ease-in-out);
   }
 
   .born {
@@ -254,6 +243,7 @@ $portrait_size: 100vw;
   }
 
   .merged {
+    z-index: 2;
     @include animation(pop 200ms ease 100ms);
     @include animation-fill-mode(backwards);
   }

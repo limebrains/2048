@@ -30,7 +30,9 @@ export const newSquare = (game: IGAME, id: number) => {
     }
   }
   game.board.map((field: IFIELD, index: number) => {
-    zeros[field.row][field.col] = false;
+    if (field.merged !== -1) {
+      zeros[field.row + field.direction[1]][field.col + field.direction[0]] = false;
+    }
   });
   let zerosTuple: any[] = [];
   for (let rowIndex = 0; rowIndex < game.rows; rowIndex++) {
@@ -40,6 +42,7 @@ export const newSquare = (game: IGAME, id: number) => {
       }
     }
   }
+  if (zerosTuple.length === 0) { console.log('NO FREE FIELDS?!'); }
   let chosenField = zerosTuple[Math.floor((Math.random() * zerosTuple.length))];
   let newField: IFIELD = {
     born: true,

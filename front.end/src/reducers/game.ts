@@ -21,7 +21,9 @@ const isOver = (game: IGAME): boolean => {
     }
   }
   game.board.map((field: IFIELD, index: number) => {
-    squareBoard[field.row][field.col] = field.value;
+    if (field.merged !== -1) {
+      squareBoard[field.row + field.direction[1]][field.col + field.direction[0]] = field.value;
+    }
   });
   for (let row = 0; row < game.rows; row++) {
     for (let col = 0; col < game.cols; col++) {
@@ -38,7 +40,7 @@ const isOver = (game: IGAME): boolean => {
 const compressLine = (line: IFIELD[],
                       byRows: boolean,
                       isInverted: boolean,
-                      gameOnlyForNewIds: IGAME): [boolean, IFIELD[], number] => {
+                      gameOnlyForNewIds: IGAME): [boolean, IFIELD[], number, IFIELD[]] => {
   let points = 0;
   let takenIds: number[] = [];
   let added: IFIELD[] = [];
@@ -64,7 +66,7 @@ const compressLine = (line: IFIELD[],
       if (byRows) {
         newFieldsPosition.row = line[index].row;
         if (isInverted) {
-          newFieldsPosition.col = line.length - newIndex;
+          newFieldsPosition.col = line.length - newIndex - 1;
           direction = [difference, 0];
         } else {
           newFieldsPosition.col = newIndex;
@@ -73,7 +75,7 @@ const compressLine = (line: IFIELD[],
       } else {
         newFieldsPosition.col = line[index].col;
         if (isInverted) {
-          newFieldsPosition.row = line.length - newIndex;
+          newFieldsPosition.row = line.length - newIndex - 1;
           direction = [0, difference];
         } else {
           newFieldsPosition.row = newIndex;
@@ -83,18 +85,29 @@ const compressLine = (line: IFIELD[],
       line[index].direction = direction;
       line[index].merged = -1;
       line[newIndex].merged = -1;
-      takenIds.push(newID(gameOnlyForNewIds, takenIds));
+      let newId = newID(gameOnlyForNewIds, takenIds);
+      takenIds.push(newId);
       let mergedField: IFIELD = {
         born: false,
         col: newFieldsPosition.col,
-        direction: [],
-        id: takenIds[-1],
+        direction: [0, 0],
+        id: newId,
         merged: 1,
         row: newFieldsPosition.row,
         value: line[index].value * 2,
       };
       added.push(mergedField);
       points += line[index].value * 2;
+      line[newIndex] = mergedField;
+      line[index] = {
+        born: false,
+        col: line[index].col,
+        direction: [],
+        id: 0,
+        merged: 0,
+        row: line[index].row,
+        value: 0,
+      };
       changed = true;
     } else if (newIndex !== index) {
       let difference = index - newIndex;
@@ -113,10 +126,20 @@ const compressLine = (line: IFIELD[],
         }
       }
       line[index].direction = direction;
+      line[newIndex] = line[index];
+      line[index] = {
+        born: false,
+        col: line[index].col,
+        direction: [],
+        id: 0,
+        merged: 0,
+        row: line[index].row,
+        value: 0,
+      };
       changed = true;
     }
   }
-  return [changed, added, points];
+  return [changed, added, points, line];
 };
 
 const makeMoveForDirection = (game: IGAME, direction: string): [IGAME, number] => {
@@ -140,9 +163,13 @@ const makeMoveForDirection = (game: IGAME, direction: string): [IGAME, number] =
   for (let i = 0; i < game.board.length; i++) {
     if (game.board[i].merged === -1) {
       game.board.splice(i, 1);
+      i--;
     }
   }
   game.board.map((field: IFIELD, index: number) => {
+    if (field.merged === -1) {
+      console.log('reducers/game.ts 168th line WTF?!');
+    }
     field.merged = 0;
     field.born = false;
     if (field.direction !== [0, 0]) {
@@ -217,11 +244,12 @@ const game = (state: IGAME = initialState, action: any): IGAME => {
       const direction = action.payload;
       const gameAfterMove = makeMoveForDirection(cloneDeep(state), direction);
       return {
-        ...state,
         allMoves: state.allMoves.concat(action.payload),
         board: gameAfterMove[0].board,
+        cols: state.cols,
         direction: action.payload,
         gameOver: isOver(gameAfterMove[0]),
+        rows: state.rows,
         score: state.score + gameAfterMove[1],
       };
     case START:
