@@ -1,30 +1,33 @@
-import { includes } from 'lodash';
-import {newSquare} from '../actions/game';
-import {DOWN, LEFT, MOVE, RIGHT, START, UP} from '../constants';
+import { cloneDeep } from 'lodash';
+import {newID, newSquare} from '../actions/game';
+import {DOWN, IFIELD, IGAME, LEFT, MOVE, RIGHT, START, UP} from '../constants';
 
-interface IState {
-  allMoves: string[];
-  board: number[];
-  direction: string;
-  gameOver: boolean;
-  score: number;
-}
-
-const initialState: IState = {
+const initialState: IGAME = {
   allMoves: [],
   board: [],
+  cols: 0,
   direction: '',
   gameOver: false,
+  rows: 0,
   score: 0,
 };
 
-const isOver = (game: any): boolean => {
-  let size = game[0].length;
-  for (let row = 0; row < size; row++) {
-    for (let col = 0; col < size; col++) {
-      if (game[row][col] === 0
-        || ( col + 1 < size && game[row][col] === game[row][col + 1] )
-        || ( row + 1 < size && game[row][col] === game[row + 1][col] ) ) {
+const isOver = (game: IGAME): boolean => {
+  let squareBoard: number[][] = [];
+  for (let rowIndex = 0; rowIndex < game.rows; rowIndex++) {
+    squareBoard[rowIndex] = [];
+    for (let colIndex = 0; colIndex < game.cols; colIndex++) {
+      squareBoard[rowIndex][colIndex] = 0;
+    }
+  }
+  game.board.map((field: IFIELD, index: number) => {
+    squareBoard[field.row][field.col] = field.value;
+  });
+  for (let row = 0; row < game.rows; row++) {
+    for (let col = 0; col < game.cols; col++) {
+      if (squareBoard[row][col] === 0
+        || ( col + 1 < game.cols && squareBoard[row][col] === squareBoard[row][col + 1] )
+        || ( row + 1 < game.rows && squareBoard[row][col] === squareBoard[row + 1][col] ) ) {
         return false;
       }
     }
@@ -32,87 +35,166 @@ const isOver = (game: any): boolean => {
   return true;
 };
 
-const compressLine = (line: number[]): [boolean, number[], number] => {
+const compressLine = (line: IFIELD[],
+                      byRows: boolean,
+                      isInverted: boolean,
+                      gameOnlyForNewIds: IGAME): [boolean, IFIELD[], number] => {
   let points = 0;
+  let takenIds: number[] = [];
+  let added: IFIELD[] = [];
   let size = line.length;
-  let merged: number[] = [];
   let changed = false;
   for (let index = 0; index < size; index++) {
-    if (line[index] !== 0) {
-      let newIndex = index;
-      while (newIndex - 1 >= 0 && line[newIndex - 1] === 0) {
-        newIndex -= 1;
+    if (line[index].value === 0) {
+      continue;
+    }
+    let newIndex = index;
+    while (newIndex - 1 >= 0 && line[newIndex - 1].value === 0) {
+      newIndex -= 1;
+    }
+    // TODO: merging rules
+    if (newIndex - 1 >= 0
+      && line[newIndex - 1].merged_or_new !== 1
+      && line[newIndex - 1].merged_or_new !== -1
+      && line[newIndex - 1].value === line[index].value) {
+      newIndex--;
+      let direction: number[] = [];
+      let difference = index - newIndex;
+      let newFieldsPosition = {row: 0, col: 0};
+      if (byRows) {
+        newFieldsPosition.row = line[index].row;
+        if (isInverted) {
+          newFieldsPosition.col = line.length - newIndex;
+          direction = [difference, 0];
+        } else {
+          newFieldsPosition.col = newIndex;
+          direction = [-difference, 0];
+        }
+      } else {
+        newFieldsPosition.col = line[index].col;
+        if (isInverted) {
+          newFieldsPosition.row = line.length - newIndex;
+          direction = [0, difference];
+        } else {
+          newFieldsPosition.row = newIndex;
+          direction = [0, -difference];
+        }
       }
-      if (!includes(merged, newIndex - 1)
-        && line[newIndex - 1] === line[index]) {
-        line[newIndex - 1] *= 2;
-        line[index] = 0;
-        merged.splice(0, 0, newIndex - 1);
-        points += line[newIndex - 1];
-        changed = true;
-      } else if (newIndex !== index) {
-        line[newIndex] = line[index];
-        line[index] = 0;
-        changed = true;
+      line[index].direction = direction;
+      line[index].merged_or_new = -1;
+      line[newIndex].merged_or_new = -1;
+      takenIds.push(newID(gameOnlyForNewIds, takenIds));
+      let mergedField: IFIELD = {
+        col: newFieldsPosition.col,
+        direction: [],
+        id: takenIds[-1],
+        merged_or_new: 1,
+        row: newFieldsPosition.row,
+        value: line[index].value * 2,
+      };
+      added.push(mergedField);
+      points += line[index].value * 2;
+      changed = true;
+    } else if (newIndex !== index) {
+      let difference = index - newIndex;
+      let direction: number[] = [];
+      if (byRows) {
+        if (isInverted) {
+          direction = [difference, 0];
+        } else {
+          direction = [-difference, 0];
+        }
+      } else {
+        if (isInverted) {
+          direction = [0, difference];
+        } else {
+          direction = [0, -difference];
+        }
       }
+      line[index].direction = direction;
+      changed = true;
     }
   }
-  return [changed, line, points];
+  return [changed, added, points];
 };
 
-const makeMoveForDirection = (game: any, direction: any): [any, number] => {
+const makeMoveForDirection = (game: IGAME, direction: string): [IGAME, number] => {
   let points = 0;
-  let size = game[0].length;
   let changed = false;
+  let squareBoard: IFIELD[][] = [];
+  for (let rowIndex = 0; rowIndex < game.rows; rowIndex++) {
+    squareBoard[rowIndex] = [];
+    for (let colIndex = 0; colIndex < game.cols; colIndex++) {
+      squareBoard[rowIndex][colIndex] = {
+        col: colIndex,
+        direction: [],
+        id: 0,
+        merged_or_new: 0,
+        row: rowIndex,
+        value: 0,
+      };
+    }
+  }
+  for (let i = 0; i < game.board.length; i++) {
+    if (game.board[i].merged_or_new === -1) {
+      game.board.splice(i, 1);
+    }
+  }
+  game.board.map((field: IFIELD, index: number) => {
+    if (field.merged_or_new === 1) {
+      field.merged_or_new = 0;
+    }
+    if (field.direction !== [0, 0]) {
+      field.col += field.direction[0];
+      field.row += field.direction[1];
+      field.direction = [0, 0];
+    }
+    squareBoard[field.row][field.col] = field;
+  });
   switch (direction) {
     case LEFT:
-      for (let rowIndex = 0; rowIndex < size; rowIndex++) {
-        const compressedLine = compressLine(game[rowIndex]);
+      for (let rowIndex = 0; rowIndex < game.rows; rowIndex++) {
+        const compressedLine = compressLine(squareBoard[rowIndex], true, false, game);
         if (compressedLine[0]) {
-          game[rowIndex] = compressedLine[1];
+          game.board.push(...compressedLine[1]);
           points += compressedLine[2];
           changed = true;
         }
       }
       break;
     case RIGHT:
-      for (let rowIndex = 0; rowIndex < size; rowIndex++) {
-        const compressedLine = compressLine(game[rowIndex].reverse());
-        game[rowIndex].reverse();
+      for (let rowIndex = 0; rowIndex < game.rows; rowIndex++) {
+        const compressedLine = compressLine(squareBoard[rowIndex].reverse(), true, true, game);
         if (compressedLine[0]) {
-          game[rowIndex] = compressedLine[1];
+          game.board.push(...compressedLine[1]);
           points += compressedLine[2];
           changed = true;
         }
       }
       break;
     case UP:
-      for (let colIndex = 0; colIndex < size; colIndex++) {
-        let line: number[] = [];
-        for (let rowIndex = 0; rowIndex < size; rowIndex++) {
-          line.splice(0, 0, game[rowIndex][colIndex]);
+      for (let colIndex = 0; colIndex < game.cols; colIndex++) {
+        let line: IFIELD[] = [];
+        for (let rowIndex = 0; rowIndex < game.rows; rowIndex++) {
+          line.splice(0, 0, squareBoard[rowIndex][colIndex]);
         }
-        const compressedLine = compressLine(line.reverse());
+        const compressedLine = compressLine(line.reverse(), false, false, game);
         if (compressedLine[0]) {
-          for (let rowIndex = 0; rowIndex < size; rowIndex++) {
-            game[rowIndex][colIndex] = compressedLine[1][rowIndex];
-          }
+          game.board.push(...compressedLine[1]);
           points += compressedLine[2];
           changed = true;
         }
       }
       break;
     case DOWN:
-      for (let colIndex = 0; colIndex < size; colIndex++) {
-        let line: number[] = [];
-        for (let rowIndex = 0; rowIndex < size; rowIndex++) {
-          line.splice(0, 0, game[rowIndex][colIndex]);
+      for (let colIndex = 0; colIndex < game.cols; colIndex++) {
+        let line: IFIELD[] = [];
+        for (let rowIndex = 0; rowIndex < game.rows; rowIndex++) {
+          line.splice(0, 0, squareBoard[rowIndex][colIndex]);
         }
-        const compressedLine = compressLine(line);
+        const compressedLine = compressLine(line, false, true, game);
         if (compressedLine[0]) {
-          for (let rowIndex = 0; rowIndex < size; rowIndex++) {
-            game[size - rowIndex - 1][colIndex] = compressedLine[1][rowIndex];
-          }
+          game.board.push(...compressedLine[1]);
           points += compressedLine[2];
           changed = true;
         }
@@ -121,34 +203,30 @@ const makeMoveForDirection = (game: any, direction: any): [any, number] => {
     default:
       break;
   }
+
   if (changed) {
-    game = newSquare(game);
+    game = newSquare(game, newID(game, []));
   }
   return [game, points];
 };
 
-const game = (state = initialState, action: any) => {
+const game = (state: IGAME = initialState, action: any): IGAME => {
   switch (action.type) {
     case MOVE:
       const direction = action.payload;
-      const gameAfterMove = makeMoveForDirection(state.board, direction);
+      const gameAfterMove = makeMoveForDirection(cloneDeep(state), direction);
       return {
         ...state,
         allMoves: state.allMoves.concat(action.payload),
-        board: gameAfterMove[0],
+        board: gameAfterMove[0].board,
         direction: action.payload,
-        score: state.score + gameAfterMove[1],
         gameOver: isOver(gameAfterMove[0]),
+        score: state.score + gameAfterMove[1],
       };
     case START:
-      return {
-        ...state,
-        board: action.payload,
-        score: 0,
-        gameOver: false,
-      };
+      return action.payload;
     default:
-      return state;
+      return cloneDeep({...state});
   }
 };
 

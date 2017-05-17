@@ -1,9 +1,171 @@
-@mixin transition($transition...) {
+@mixin transition($transition) {
     -moz-transition:    $transition;
     -o-transition:      $transition;
     -webkit-transition: $transition;
     transition:         $transition;
 }
+@mixin animation($animation) {
+  -webkit-animation: $animation;
+  -o-animation: $animation;
+  -moz-animation: $animation;
+  animation: $animation;
+}
+@mixin animation-fill-mode($animation) {
+  -webkit-animation-fill-mode: $animation;
+  -o-animation-fill-mode: $animation;
+  -moz-animation-fill-mode: $animation;
+  animation-fill-mode: $animation;
+}
+@mixin transition-property($transforms) {
+	   -moz-transition-property: -moz-#{$transforms};
+	     -o-transition-property: -o-#{$transforms};
+	-webkit-transition-property: -webkit-#{$transforms};
+          transition-property: $transforms;
+}
+@mixin transform($transforms) {
+	   -moz-transform: $transforms;
+	     -o-transform: $transforms;
+	-webkit-transform: $transforms;
+          transform: $transforms;
+}
+@mixin translate ($x, $y) {
+   @include transform(translate($x, $y));
+}
+$landscape_size: 80vh;
+$portrait_size: 100vw;
+
+
+@-webkit-keyframes fade-in {
+  0% {
+    opacity: 0; }
+
+  100% {
+    opacity: 1; } }
+@-moz-keyframes fade-in {
+  0% {
+    opacity: 0; }
+
+  100% {
+    opacity: 1; } }
+@keyframes fade-in {
+  0% {
+    opacity: 0; }
+
+  100% {
+    opacity: 1; } }
+
+@-webkit-keyframes appear {
+  0% {
+    opacity: 0;
+    -webkit-transform: scale(0);
+    -moz-transform: scale(0);
+    -ms-transform: scale(0);
+    transform: scale(0); }
+
+  100% {
+    opacity: 1;
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1); } }
+@-moz-keyframes appear {
+  0% {
+    opacity: 0;
+    -webkit-transform: scale(0);
+    -moz-transform: scale(0);
+    -ms-transform: scale(0);
+    transform: scale(0); }
+
+  100% {
+    opacity: 1;
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1); } }
+@keyframes appear {
+  0% {
+    /* opacity: 0; */
+    /* -webkit-transform: scale(0); */
+    -moz-transform: scale(0);
+    -ms-transform: scale(0);
+    /* transform: scale(0); */
+    }
+
+  100% {
+    /* opacity: 1; */
+    /* -webkit-transform: scale(1); */
+    -moz-transform: scale(1);
+    -ms-transform: scale(1);
+    /* transform: scale(1); */
+    } }
+
+@-webkit-keyframes pop {
+  0% {
+    -webkit-transform: scale(0);
+    -moz-transform: scale(0);
+    -ms-transform: scale(0);
+    transform: scale(0); }
+
+  50% {
+    -webkit-transform: scale(1.2);
+    -moz-transform: scale(1.2);
+    -ms-transform: scale(1.2);
+    transform: scale(1.2); }
+
+  100% {
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1); } }
+@-moz-keyframes pop {
+  0% {
+    -webkit-transform: scale(0);
+    -moz-transform: scale(0);
+    -ms-transform: scale(0);
+    transform: scale(0); }
+
+  50% {
+    -webkit-transform: scale(1.2);
+    -moz-transform: scale(1.2);
+    -ms-transform: scale(1.2);
+    transform: scale(1.2); }
+
+  100% {
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1); } }
+@keyframes pop {
+  0% {
+    -webkit-transform: scale(0);
+    -moz-transform: scale(0);
+    -ms-transform: scale(0);
+    transform: scale(0); }
+
+  50% {
+    -webkit-transform: scale(1.2);
+    -moz-transform: scale(1.2);
+    -ms-transform: scale(1.2);
+    transform: scale(1.2); }
+
+  100% {
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1); } }
+
+.tile-new .tile-inner {
+  @include animation(appear 200ms ease 100ms);
+}
+
+.field_merged {
+  z-index: 2;
+  @include animation(pop 200ms ease 100ms);
+}
+
+// fade-in - game_massage, appear, pop
+
+
 
 .container {
   margin: 0;
@@ -42,38 +204,58 @@
       margin: auto;
       background: #bbada0;
       position: relative;
+      border-radius: 1.2%;
 
-      .v0 { color: #776e65; background: #cdc1b4; }
-      .v2 { color: #776e65; background: #eee4da; }
-      .v4 { color: #776e65; background: #ede0c8; }
-      .v8 { color: #f9f6f2; background: #f2b179; }
-      .v16 { color: #f9f6f2; background: #f59563; }
-      .v32 { color: #f9f6f2; background: #f67c5f; }
-      .v64 { color: #f9f6f2; background: #f65e3b; }
-      .v128 { color: #f9f6f2; background: #edcf72; }
-      .v256 { color: #f9f6f2; background: #edcc61; }
-      .v512 { color: #f9f6f2; background: #edc850; }
-      .v1024 { color: #f9f6f2; background: #edc53f; }
-      .v2048 { color: #f9f6f2; background: #edc22e; }
+      .v0 { z-index: 1; color: #776e65; background: #cdc1b4; }
+      .v2 { z-index: 2; color: #776e65; background: #eee4da; }
+      .v4 { z-index: 2; color: #776e65; background: #ede0c8; }
+      .v8 { z-index: 2; color: #f9f6f2; background: #f2b179; }
+      .v16 { z-index: 2; color: #f9f6f2; background: #f59563; }
+      .v32 { z-index: 2; color: #f9f6f2; background: #f67c5f; }
+      .v64 { z-index: 2; color: #f9f6f2; background: #f65e3b; }
+      .v128 { z-index: 2; color: #f9f6f2; background: #edcf72; }
+      .v256 { z-index: 2; color: #f9f6f2; background: #edcc61; }
+      .v512 { z-index: 2; color: #f9f6f2; background: #edc850; }
+      .v1024 { z-index: 2; color: #f9f6f2; background: #edc53f; }
+      .v2048 { z-index: 2; color: #f9f6f2; background: #edc22e; }
 
       .game_over {
+        z-index: 3;
         position: absolute;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(200, 200, 200, 0.5);
+        background: rgba(238, 228, 218, 0.73);
         overflow: hidden;
         text-align: center;
         font-weight: bold;
+        @include animation(fade-in 800ms ease 1200ms);
+        @include animation-fill-mode(both);
       }
     }
   }
 
   .field {
+    position: absolute;
     overflow: hidden;
     text-align: center;
     font-weight: bold;
+    width: 21.25%;
+    height: 21.25%;
+    border-radius: 0.6%;
+    //@include transition-property(transform);
+    @include transition(all 2000ms ease-in-out);
+  }
+
+  .field_new {
+    @include animation(appear 200ms ease 100ms);
+    @include animation-fill-mode(backwards);
+  }
+
+  .field_merged {
+    @include animation(pop 200ms ease 100ms);
+    @include animation-fill-mode(backwards);
   }
 
   .row {
@@ -82,53 +264,83 @@
 
   @media all and (orientation:landscape) {
     .game_container {
-      width: 80vh;
-      height: 80vh;
-      border-radius: 0.96vh;
+      width: $landscape_size;
+      height: $landscape_size;
     }
 
     .field {
-      width: 17vh;
-      height: 17vh;
-      line-height: 17vh;
-      margin: 2.4vh 0 0 2.4vh;
-      font-size: 8.8vh;
-      border-radius: 0.48vh;
+      line-height: 0.2125 * $landscape_size;
+      //margin: 0.03 * $landscape_size 0 0 0.03 * $landscape_size;
+      font-size: 0.11 * $landscape_size;
     }
-    .v128 { font-size: 7.2vh }
-    .v256 { font-size: 7.2vh }
-    .v512 { font-size: 7.2vh }
-    .v1024 { font-size: 5.6vh }
-    .v2048 { font-size: 5.6vh }
+    .v128 { font-size: 0.09 * $landscape_size }
+    .v256 { font-size: 0.09 * $landscape_size }
+    .v512 { font-size: 0.09 * $landscape_size }
+    .v1024 { font-size: 0.07 * $landscape_size }
+    .v2048 { font-size: 0.07 * $landscape_size }
 
     .game_over {
-      line-height: 80vh;
+      line-height: $landscape_size;
+    }
+
+    .game_grid_0_0_at_4 { @include translate(0.03 * $landscape_size, 0.03 * $landscape_size) }
+    .game_grid_0_1_at_4 { @include translate(0.2725 * $landscape_size, 0.03 * $landscape_size) }
+    .game_grid_0_2_at_4 { @include translate(0.515 * $landscape_size, 0.03 * $landscape_size) }
+    .game_grid_0_3_at_4 { @include translate(0.7575 * $landscape_size, 0.03 * $landscape_size) }
+    .game_grid_1_0_at_4 { @include translate(0.03 * $landscape_size, 0.2725 * $landscape_size) }
+    .game_grid_1_1_at_4 { @include translate(0.2725 * $landscape_size, 0.2725 * $landscape_size) }
+    .game_grid_1_2_at_4 { @include translate(0.515 * $landscape_size, 0.2725 * $landscape_size) }
+    .game_grid_1_3_at_4 { @include translate(0.7575 * $landscape_size, 0.2725 * $landscape_size) }
+    .game_grid_2_0_at_4 { @include translate(0.03 * $landscape_size, 0.515 * $landscape_size) }
+    .game_grid_2_1_at_4 { @include translate(0.2725 * $landscape_size, 0.515 * $landscape_size) }
+    .game_grid_2_2_at_4 { @include translate(0.515 * $landscape_size, 0.515 * $landscape_size) }
+    .game_grid_2_3_at_4 { @include translate(0.7575 * $landscape_size, 0.515 * $landscape_size) }
+    .game_grid_3_0_at_4 { @include translate(0.03 * $landscape_size, 0.7575 * $landscape_size) }
+    .game_grid_3_1_at_4 { @include translate(0.2725 * $landscape_size, 0.7575 * $landscape_size) }
+    .game_grid_3_2_at_4 { @include translate(0.515 * $landscape_size, 0.7575 * $landscape_size) }
+    .game_grid_3_3_at_4 { @include translate(0.7575 * $landscape_size, 0.7575 * $landscape_size) }
+
+    .move-to-top {
+      @include translate(0 * $landscape_size, 0 * $landscape_size)
     }
   }
 
   @media all and (orientation:portrait) {
     .game_container {
-      width: 100vw;
-      height: 100vw;
-      border-radius: 1.2vw;
+      width: $portrait_size;
+      height: $portrait_size;
     }
 
     .field {
-      width: 21.25vw;
-      height: 21.25vw;
-      line-height: 21.25vw;
-      margin: 3vw 0 0 3vw;
-      font-size: 11vw;
-      border-radius: 0.6vw;
+      line-height: 0.2125 * $portrait_size;
+      //margin: 0.03 * $portrait_size 0 0 0.03 * $portrait_size;
+      font-size: 0.11 * $portrait_size;
     }
-    .v128 { font-size: 9vw }
-    .v256 { font-size: 9vw }
-    .v512 { font-size: 9vw }
-    .v1024 { font-size: 7vw }
-    .v2048 { font-size: 7vw }
+    .v128 { font-size: 0.09 * $portrait_size }
+    .v256 { font-size: 0.09 * $portrait_size }
+    .v512 { font-size: 0.09 * $portrait_size }
+    .v1024 { font-size: 0.07 * $portrait_size }
+    .v2048 { font-size: 0.07 * $portrait_size }
 
     .game_over {
-      line-height: 100vw;
+      line-height: $portrait_size;
     }
+
+    .game_grid_0_0_at_4 {  }
+    .game_grid_0_1_at_4 {  }
+    .game_grid_0_2_at_4 {  }
+    .game_grid_0_3_at_4 {  }
+    .game_grid_1_0_at_4 {  }
+    .game_grid_1_1_at_4 {  }
+    .game_grid_1_2_at_4 {  }
+    .game_grid_1_3_at_4 {  }
+    .game_grid_2_0_at_4 {  }
+    .game_grid_2_1_at_4 {  }
+    .game_grid_2_2_at_4 {  }
+    .game_grid_2_3_at_4 {  }
+    .game_grid_3_0_at_4 {  }
+    .game_grid_3_1_at_4 {  }
+    .game_grid_3_2_at_4 {  }
+    .game_grid_3_3_at_4 {  }
   }
 }

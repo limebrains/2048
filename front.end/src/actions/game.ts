@@ -1,4 +1,4 @@
-import {MOVE, START} from '../constants';
+import {IFIELD, IGAME, MOVE, START} from '../constants';
 export const move = (direction: string) => {
   return {
     payload: direction,
@@ -6,31 +6,65 @@ export const move = (direction: string) => {
   };
 };
 
-export const newSquare = (game: any) => {
-  let zeros: any[];
-  zeros = [];
-  let size = game[0].length;
-  for (let rowIndex = 0; rowIndex < size; rowIndex++) {
-    for (let colIndex = 0; colIndex < size; colIndex++) {
-      if (game[rowIndex][colIndex] === 0) {
-        zeros.splice(0, 0, [rowIndex, colIndex]);
+export const newID = (game: IGAME, additionalTaken: number[]) => {
+  let ids: boolean[] = [];
+  let id = 1;
+  game.board.map((field: IFIELD, index: number) => {
+    ids[field.id] = true;
+  });
+  additionalTaken.map((takenId: number) => {
+    ids[takenId] = true;
+  });
+  while (ids[id] === true) {
+    id++;
+  }
+  return id;
+};
+
+export const newSquare = (game: IGAME, id: number) => {
+  let zeros: boolean[][] = [];
+  for (let rowIndex = 0; rowIndex < game.rows; rowIndex++) {
+    zeros[rowIndex] = [];
+    for (let colIndex = 0; colIndex < game.cols; colIndex++) {
+      zeros[rowIndex][colIndex] = true;
+    }
+  }
+  game.board.map((field: IFIELD, index: number) => {
+    zeros[field.row][field.col] = false;
+  });
+  let zerosTuple: any[] = [];
+  for (let rowIndex = 0; rowIndex < game.rows; rowIndex++) {
+    for (let colIndex = 0; colIndex < game.cols; colIndex++) {
+      if (zeros[rowIndex][colIndex]) {
+        zerosTuple.push({row: rowIndex, col: colIndex});
       }
     }
   }
-  let newField = Math.floor((Math.random() * zeros.length));
-  game[zeros[newField][0]][zeros[newField][1]] = Math.floor((Math.random() * 2) + 1) * 2;
+  let chosenField = zerosTuple[Math.floor((Math.random() * zerosTuple.length))];
+  let newField: IFIELD = {
+    col: chosenField.col,
+    direction: [0, 0],
+    id,
+    merged_or_new: 1,
+    row: chosenField.row,
+    value: Math.floor((Math.random() * 2) + 1) * 2,
+  };
+  game.board.push(newField);
   return game;
 };
 
-export const start = (size: number) => {
-  let startingSetUp: number[][] = [];
-  for (let i = 0; i < size; i++) {
-    startingSetUp.push([]);
-    for (let j = 0; j < size; j++) {
-      startingSetUp[i].push(0)
-    }
-  }
-  startingSetUp = newSquare(newSquare(startingSetUp));
+export const start = (rows: number, cols: number) => {
+  let startingSetUp: IGAME = {
+    allMoves: [],
+    board: [],
+    cols,
+    direction: '',
+    gameOver: false,
+    rows,
+    score: 0,
+  };
+  startingSetUp = newSquare(startingSetUp, newID(startingSetUp, []));
+  startingSetUp = newSquare(startingSetUp, newID(startingSetUp, []));
 
   return {
     payload: startingSetUp,

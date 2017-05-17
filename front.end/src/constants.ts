@@ -4,3 +4,20 @@ export const UP = 'UP';
 export const DOWN = 'DOWN';
 export const LEFT = 'LEFT';
 export const RIGHT = 'RIGHT';
+export interface IGAME {
+  allMoves: string[];
+  board: IFIELD[];
+  cols: number;
+  direction: string;
+  gameOver: boolean;
+  rows: number;
+  score: number;
+}
+export interface IFIELD {
+  col: number;
+  direction: number[];
+  id: number;
+  merged_or_new: number;
+  row: number;
+  value: number;
+}
