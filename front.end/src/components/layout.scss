@@ -154,11 +154,11 @@ $portrait_size: 100vw;
     -ms-transform: scale(1);
     transform: scale(1); } }
 
-.tile-new .tile-inner {
+.born {
   @include animation(appear 200ms ease 100ms);
 }
 
-.field_merged {
+.merged {
   z-index: 2;
   @include animation(pop 200ms ease 100ms);
 }
@@ -245,15 +245,15 @@ $portrait_size: 100vw;
     height: 21.25%;
     border-radius: 0.6%;
     //@include transition-property(transform);
-    @include transition(all 2000ms ease-in-out);
+    @include transition(all 200ms ease-in-out);
   }
 
-  .field_new {
+  .born {
     @include animation(appear 200ms ease 100ms);
     @include animation-fill-mode(backwards);
   }
 
-  .field_merged {
+  .merged {
     @include animation(pop 200ms ease 100ms);
     @include animation-fill-mode(backwards);
   }
@@ -283,23 +283,36 @@ $portrait_size: 100vw;
       line-height: $landscape_size;
     }
 
-    .game_grid_0_0_at_4 { @include translate(0.03 * $landscape_size, 0.03 * $landscape_size) }
-    .game_grid_0_1_at_4 { @include translate(0.2725 * $landscape_size, 0.03 * $landscape_size) }
-    .game_grid_0_2_at_4 { @include translate(0.515 * $landscape_size, 0.03 * $landscape_size) }
-    .game_grid_0_3_at_4 { @include translate(0.7575 * $landscape_size, 0.03 * $landscape_size) }
-    .game_grid_1_0_at_4 { @include translate(0.03 * $landscape_size, 0.2725 * $landscape_size) }
-    .game_grid_1_1_at_4 { @include translate(0.2725 * $landscape_size, 0.2725 * $landscape_size) }
-    .game_grid_1_2_at_4 { @include translate(0.515 * $landscape_size, 0.2725 * $landscape_size) }
-    .game_grid_1_3_at_4 { @include translate(0.7575 * $landscape_size, 0.2725 * $landscape_size) }
-    .game_grid_2_0_at_4 { @include translate(0.03 * $landscape_size, 0.515 * $landscape_size) }
-    .game_grid_2_1_at_4 { @include translate(0.2725 * $landscape_size, 0.515 * $landscape_size) }
-    .game_grid_2_2_at_4 { @include translate(0.515 * $landscape_size, 0.515 * $landscape_size) }
-    .game_grid_2_3_at_4 { @include translate(0.7575 * $landscape_size, 0.515 * $landscape_size) }
-    .game_grid_3_0_at_4 { @include translate(0.03 * $landscape_size, 0.7575 * $landscape_size) }
-    .game_grid_3_1_at_4 { @include translate(0.2725 * $landscape_size, 0.7575 * $landscape_size) }
-    .game_grid_3_2_at_4 { @include translate(0.515 * $landscape_size, 0.7575 * $landscape_size) }
-    .game_grid_3_3_at_4 { @include translate(0.7575 * $landscape_size, 0.7575 * $landscape_size) }
+    .game_grid_0_0_at_4 { left: 0.03 * $landscape_size; top: 0.03 * $landscape_size }
+    .game_grid_0_1_at_4 { left: 0.2725 * $landscape_size; top: 0.03 * $landscape_size }
+    .game_grid_0_2_at_4 { left: 0.515 * $landscape_size; top: 0.03 * $landscape_size }
+    .game_grid_0_3_at_4 { left: 0.7575 * $landscape_size; top: 0.03 * $landscape_size }
+    .game_grid_1_0_at_4 { left: 0.03 * $landscape_size; top: 0.2725 * $landscape_size }
+    .game_grid_1_1_at_4 { left: 0.2725 * $landscape_size; top: 0.2725 * $landscape_size }
+    .game_grid_1_2_at_4 { left: 0.515 * $landscape_size; top: 0.2725 * $landscape_size }
+    .game_grid_1_3_at_4 { left: 0.7575 * $landscape_size; top: 0.2725 * $landscape_size }
+    .game_grid_2_0_at_4 { left: 0.03 * $landscape_size; top: 0.515 * $landscape_size }
+    .game_grid_2_1_at_4 { left: 0.2725 * $landscape_size; top: 0.515 * $landscape_size }
+    .game_grid_2_2_at_4 { left: 0.515 * $landscape_size; top: 0.515 * $landscape_size }
+    .game_grid_2_3_at_4 { left: 0.7575 * $landscape_size; top: 0.515 * $landscape_size }
+    .game_grid_3_0_at_4 { left: 0.03 * $landscape_size; top: 0.7575 * $landscape_size }
+    .game_grid_3_1_at_4 { left: 0.2725 * $landscape_size; top: 0.7575 * $landscape_size }
+    .game_grid_3_2_at_4 { left: 0.515 * $landscape_size; top: 0.7575 * $landscape_size }
+    .game_grid_3_3_at_4 { left: 0.7575 * $landscape_size; top: 0.7575 * $landscape_size }
 
+    .direction_0_1 { @include translate(0, 0.2425 * $landscape_size) }
+    .direction_0_-1 { @include translate(0, -0.2425 * $landscape_size) }
+    .direction_0_2 { @include translate(0, 0.485 * $landscape_size) }
+    .direction_0_-2 { @include translate(0, -0.485 * $landscape_size) }
+    .direction_0_3 { @include translate(0, 0.7275 * $landscape_size) }
+    .direction_0_-3 { @include translate(0, -0.7275 * $landscape_size) }
+
+    .direction_1_0 { @include translate(0.2425 * $landscape_size, 0) }
+    .direction_-1_0 { @include translate(-0.2425 * $landscape_size, 0) }
+    .direction_2_0 { @include translate(0.485 * $landscape_size, 0) }
+    .direction_-2_0 { @include translate(-0.485 * $landscape_size, 0) }
+    .direction_3_0 { @include translate(0.7275 * $landscape_size, 0) }
+    .direction_-3_0 { @include translate(-0.7275 * $landscape_size, 0) }
     .move-to-top {
       @include translate(0 * $landscape_size, 0 * $landscape_size)
     }

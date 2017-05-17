@@ -42,10 +42,11 @@ export const newSquare = (game: IGAME, id: number) => {
   }
   let chosenField = zerosTuple[Math.floor((Math.random() * zerosTuple.length))];
   let newField: IFIELD = {
+    born: true,
     col: chosenField.col,
     direction: [0, 0],
     id,
-    merged_or_new: 1,
+    merged: 0,
     row: chosenField.row,
     value: Math.floor((Math.random() * 2) + 1) * 2,
   };

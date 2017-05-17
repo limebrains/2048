@@ -54,8 +54,8 @@ const compressLine = (line: IFIELD[],
     }
     // TODO: merging rules
     if (newIndex - 1 >= 0
-      && line[newIndex - 1].merged_or_new !== 1
-      && line[newIndex - 1].merged_or_new !== -1
+      && line[newIndex - 1].merged !== 1
+      && line[newIndex - 1].merged !== -1
       && line[newIndex - 1].value === line[index].value) {
       newIndex--;
       let direction: number[] = [];
@@ -81,14 +81,15 @@ const compressLine = (line: IFIELD[],
         }
       }
       line[index].direction = direction;
-      line[index].merged_or_new = -1;
-      line[newIndex].merged_or_new = -1;
+      line[index].merged = -1;
+      line[newIndex].merged = -1;
       takenIds.push(newID(gameOnlyForNewIds, takenIds));
       let mergedField: IFIELD = {
+        born: false,
         col: newFieldsPosition.col,
         direction: [],
         id: takenIds[-1],
-        merged_or_new: 1,
+        merged: 1,
         row: newFieldsPosition.row,
         value: line[index].value * 2,
       };
@@ -126,24 +127,24 @@ const makeMoveForDirection = (game: IGAME, direction: string): [IGAME, number] =
     squareBoard[rowIndex] = [];
     for (let colIndex = 0; colIndex < game.cols; colIndex++) {
       squareBoard[rowIndex][colIndex] = {
+        born: false,
         col: colIndex,
         direction: [],
         id: 0,
-        merged_or_new: 0,
+        merged: 0,
         row: rowIndex,
         value: 0,
       };
     }
   }
   for (let i = 0; i < game.board.length; i++) {
-    if (game.board[i].merged_or_new === -1) {
+    if (game.board[i].merged === -1) {
       game.board.splice(i, 1);
     }
   }
   game.board.map((field: IFIELD, index: number) => {
-    if (field.merged_or_new === 1) {
-      field.merged_or_new = 0;
-    }
+    field.merged = 0;
+    field.born = false;
     if (field.direction !== [0, 0]) {
       field.col += field.direction[0];
       field.row += field.direction[1];

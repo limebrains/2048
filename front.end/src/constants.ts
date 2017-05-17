@@ -14,10 +14,11 @@ export interface IGAME {
   score: number;
 }
 export interface IFIELD {
+  born: boolean;
   col: number;
   direction: number[];
   id: number;
-  merged_or_new: number;
+  merged: number;
   row: number;
   value: number;
 }
