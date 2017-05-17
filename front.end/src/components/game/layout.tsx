@@ -28,11 +28,11 @@ class GameLayout extends React.Component<IProps, {}> {
     }
     for (let row = 0; row < this.props.game.rows; row++) {
       for (let col = 0; col < this.props.game.cols; col++) {
-        gameGrid.push(<div className={`field v0 game_grid_${row}_${col}_at_${cssSize}`}/>);
+        gameGrid.push(<div key={`game_grid_${row}_${col}`} className={`field v0 game_grid_${row}_${col}_at_${cssSize}`}/>);
       }
     }
     return (
-      <div>
+      <div key="GAME">
         <header>
           <ReactRouter.Link to="/" >
             <button className="btn btn-primary" >
@@ -49,11 +49,11 @@ class GameLayout extends React.Component<IProps, {}> {
             {this.props.game.score}
           </button>
         </header>
-        <div className="game_container">
-          <div className="game_grid">
+        <div key="game_container" className="game_container">
+          <div key="game_grid" className="game_grid">
             { gameGrid }
           </div>
-          <div className="game_board">
+          <div key="game_board" className="game_board">
             {this.props.game.board.map((field: IFIELD, index: number) => {
                 let fieldClass = `field v${field.value} game_grid_${field.row}_${field.col}_at_${cssSize}`;
                 if (field.merged_or_new === 1) { fieldClass += ` merged_or_new`; }
