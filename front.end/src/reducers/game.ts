@@ -266,7 +266,7 @@ const game = (state: IGame = initialState, action: any): IGame => {
     case START:
       return action.payload;
     case UNDO:
-      if (state.undoCount >= state.undoMax && state.undoMax !== 0) {
+      if (( state.undoCount >= state.undoMax && state.undoMax !== 0 ) || state.allMoves.length === 0) {
         return state;
       }
       return {
