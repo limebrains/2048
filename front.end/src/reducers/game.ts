@@ -1,8 +1,8 @@
 import { cloneDeep } from 'lodash';
 import {newID, newSquare} from '../actions/game';
-import {DOWN, IFIELD, IGAME, IREDUCEDGAME, LEFT, MOVE, RIGHT, START, UP} from '../constants';
+import {DOWN, IField, IGame, IReducedGame, LEFT, MOVE, RIGHT, START, UNDO, UP} from '../constants';
 
-const initialState: IGAME = {
+const initialState: IGame = {
   allMoves: [],
   board: [],
   cols: 0,
@@ -10,9 +10,11 @@ const initialState: IGAME = {
   gameOver: false,
   rows: 0,
   score: 0,
+  undoCount: 0,
+  undoMax: 0,
 };
 
-const isOver = (game: IREDUCEDGAME): boolean => {
+const isOver = (game: IReducedGame): boolean => {
   let squareBoard: number[][] = [];
   for (let rowIndex = 0; rowIndex < game.rows; rowIndex++) {
     squareBoard[rowIndex] = [];
@@ -20,7 +22,7 @@ const isOver = (game: IREDUCEDGAME): boolean => {
       squareBoard[rowIndex][colIndex] = 0;
     }
   }
-  game.board.map((field: IFIELD, index: number) => {
+  game.board.map((field: IField, index: number) => {
     if (field.merged !== -1) {
       squareBoard[field.row + field.direction[1]][field.col + field.direction[0]] = field.value;
     }
@@ -37,13 +39,13 @@ const isOver = (game: IREDUCEDGAME): boolean => {
   return true;
 };
 
-const compressLine = (line: IFIELD[],
+const compressLine = (line: IField[],
                       byRows: boolean,
                       isInverted: boolean,
-                      gameOnlyForNewIds: IREDUCEDGAME): [boolean, IFIELD[], number, IFIELD[]] => {
+                      gameOnlyForNewIds: IReducedGame): [boolean, IField[], number, IField[]] => {
   let points = 0;
   let takenIds: number[] = [];
-  let added: IFIELD[] = [];
+  let added: IField[] = [];
   let size = line.length;
   let changed = false;
   for (let index = 0; index < size; index++) {
@@ -87,7 +89,7 @@ const compressLine = (line: IFIELD[],
       line[newIndex].merged = -1;
       let newId = newID(gameOnlyForNewIds, takenIds);
       takenIds.push(newId);
-      let mergedField: IFIELD = {
+      let mergedField: IField = {
         born: false,
         col: newFieldsPosition.col,
         direction: [0, 0],
@@ -142,10 +144,10 @@ const compressLine = (line: IFIELD[],
   return [changed, added, points, line];
 };
 
-const makeMoveForDirection = (game: IREDUCEDGAME, direction: string): [IREDUCEDGAME, number] => {
+const makeMoveForDirection = (game: IReducedGame, direction: string): [IReducedGame, number] => {
   let points = 0;
   let changed = false;
-  let squareBoard: IFIELD[][] = [];
+  let squareBoard: IField[][] = [];
   for (let rowIndex = 0; rowIndex < game.rows; rowIndex++) {
     squareBoard[rowIndex] = [];
     for (let colIndex = 0; colIndex < game.cols; colIndex++) {
@@ -166,7 +168,7 @@ const makeMoveForDirection = (game: IREDUCEDGAME, direction: string): [IREDUCEDG
       i--;
     }
   }
-  game.board.map((field: IFIELD, index: number) => {
+  game.board.map((field: IField, index: number) => {
     field.merged = 0;
     field.born = false;
     if (field.direction !== [0, 0]) {
@@ -199,7 +201,7 @@ const makeMoveForDirection = (game: IREDUCEDGAME, direction: string): [IREDUCEDG
       break;
     case UP:
       for (let colIndex = 0; colIndex < game.cols; colIndex++) {
-        let line: IFIELD[] = [];
+        let line: IField[] = [];
         for (let rowIndex = 0; rowIndex < game.rows; rowIndex++) {
           line.splice(0, 0, squareBoard[rowIndex][colIndex]);
         }
@@ -213,7 +215,7 @@ const makeMoveForDirection = (game: IREDUCEDGAME, direction: string): [IREDUCEDG
       break;
     case DOWN:
       for (let colIndex = 0; colIndex < game.cols; colIndex++) {
-        let line: IFIELD[] = [];
+        let line: IField[] = [];
         for (let rowIndex = 0; rowIndex < game.rows; rowIndex++) {
           line.splice(0, 0, squareBoard[rowIndex][colIndex]);
         }
@@ -235,11 +237,11 @@ const makeMoveForDirection = (game: IREDUCEDGAME, direction: string): [IREDUCEDG
   return [game, points];
 };
 
-const game = (state: IGAME = initialState, action: any): IGAME => {
+const game = (state: IGame = initialState, action: any): IGame => {
   switch (action.type) {
     case MOVE:
       const direction = action.payload;
-      const reducedGame: IREDUCEDGAME = {
+      const reducedGame: IReducedGame = {
         board: state.board,
         cols: state.cols,
         direction: state.direction,
@@ -258,9 +260,26 @@ const game = (state: IGAME = initialState, action: any): IGAME => {
         gameOver: isOver(gameAfterMove[0]),
         rows: state.rows,
         score: state.score + gameAfterMove[1],
+        undoCount: state.undoCount,
+        undoMax: state.undoMax,
       };
     case START:
       return action.payload;
+    case UNDO:
+      if (state.undoCount >= state.undoMax && state.undoMax !== 0) {
+        return state;
+      }
+      return {
+        allMoves: state.allMoves.slice(0, state.allMoves.length - 1),
+        board: state.allMoves[state.allMoves.length - 1].board,
+        cols: state.cols,
+        direction: state.allMoves[state.allMoves.length - 1].direction,
+        gameOver: state.allMoves[state.allMoves.length - 1].gameOver,
+        rows: state.rows,
+        score: state.allMoves[state.allMoves.length - 1].score,
+        undoCount: state.undoCount + 1,
+        undoMax: state.undoMax,
+      };
     default:
       return state;
   }

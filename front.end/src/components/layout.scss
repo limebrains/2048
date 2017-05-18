@@ -32,7 +32,7 @@
    @include transform(translate($x, $y));
 }
 $landscape_size: 80vh;
-$portrait_size: 100vw;
+$portrait_size: 90vw;
 
 
 @-webkit-keyframes fade-in {
@@ -225,18 +225,6 @@ $portrait_size: 100vw;
     }
   }
 
-  .field {
-    position: absolute;
-    overflow: hidden;
-    text-align: center;
-    font-weight: bold;
-    width: 21.25%;
-    height: 21.25%;
-    border-radius: 0.6%;
-    @include transition-property(transform);
-    @include transition(100ms ease-in-out);
-  }
-
   .born {
     @include animation(appear 200ms ease 100ms);
     @include animation-fill-mode(backwards);
@@ -248,8 +236,23 @@ $portrait_size: 100vw;
     @include animation-fill-mode(backwards);
   }
 
-  .row {
-    margin: 0 0 0 0;
+  .field {
+    position: absolute;
+    overflow: hidden;
+    text-align: center;
+    font-weight: bold;
+    @include transition-property(transform);
+    @include transition(100ms ease-in-out);
+  }
+
+  .field_at_4 {
+    width: 21.25%;
+    height: 21.25%;
+  }
+
+  .field_at_5 {
+    width: 17.1%;
+    height: 17.1%;
   }
 
   @media all and (orientation:landscape) {
@@ -258,20 +261,31 @@ $portrait_size: 100vw;
       height: $landscape_size;
     }
 
-    .field {
-      line-height: 0.2125 * $landscape_size;
-      //margin: 0.03 * $landscape_size 0 0 0.03 * $landscape_size;
-      font-size: 0.11 * $landscape_size;
-    }
-    .v128 { font-size: 0.09 * $landscape_size }
-    .v256 { font-size: 0.09 * $landscape_size }
-    .v512 { font-size: 0.09 * $landscape_size }
-    .v1024 { font-size: 0.07 * $landscape_size }
-    .v2048 { font-size: 0.07 * $landscape_size }
-
     .game_over {
       line-height: $landscape_size;
     }
+
+    .field_at_4 {
+      line-height: 0.2125 * $landscape_size;
+      font-size: 0.11 * $landscape_size;
+    }
+
+    .field_at_5 {
+      line-height: 0.171 * $landscape_size;
+      font-size: 0.088 * $landscape_size;
+    }
+
+    .v128_at_4 { font-size: 0.09 * $landscape_size }
+    .v256_at_4 { font-size: 0.09 * $landscape_size }
+    .v512_at_4 { font-size: 0.09 * $landscape_size }
+    .v1024_at_4 { font-size: 0.07 * $landscape_size }
+    .v2048_at_4 { font-size: 0.07 * $landscape_size }
+
+    .v128_at_5 { font-size: 0.072 * $landscape_size }
+    .v256_at_5 { font-size: 0.072 * $landscape_size }
+    .v512_at_5 { font-size: 0.072 * $landscape_size }
+    .v1024_at_5 { font-size: 0.056 * $landscape_size }
+    .v2048_at_5 { font-size: 0.056 * $landscape_size }
 
     .game_grid_0_0_at_4 { left: 0.03 * $landscape_size; top: 0.03 * $landscape_size }
     .game_grid_0_1_at_4 { left: 0.2725 * $landscape_size; top: 0.03 * $landscape_size }
@@ -290,22 +304,31 @@ $portrait_size: 100vw;
     .game_grid_3_2_at_4 { left: 0.515 * $landscape_size; top: 0.7575 * $landscape_size }
     .game_grid_3_3_at_4 { left: 0.7575 * $landscape_size; top: 0.7575 * $landscape_size }
 
-    .direction_0_1 { @include translate(0, 0.2425 * $landscape_size) }
-    .direction_0_-1 { @include translate(0, -0.2425 * $landscape_size) }
-    .direction_0_2 { @include translate(0, 0.485 * $landscape_size) }
-    .direction_0_-2 { @include translate(0, -0.485 * $landscape_size) }
-    .direction_0_3 { @include translate(0, 0.7275 * $landscape_size) }
-    .direction_0_-3 { @include translate(0, -0.7275 * $landscape_size) }
-
-    .direction_1_0 { @include translate(0.2425 * $landscape_size, 0) }
-    .direction_-1_0 { @include translate(-0.2425 * $landscape_size, 0) }
-    .direction_2_0 { @include translate(0.485 * $landscape_size, 0) }
-    .direction_-2_0 { @include translate(-0.485 * $landscape_size, 0) }
-    .direction_3_0 { @include translate(0.7275 * $landscape_size, 0) }
-    .direction_-3_0 { @include translate(-0.7275 * $landscape_size, 0) }
-    .move-to-top {
-      @include translate(0 * $landscape_size, 0 * $landscape_size)
-    }
+    .game_grid_0_0_at_5 { left: 0.0242 * $landscape_size; top: 0.0242 * $landscape_size }
+    .game_grid_0_1_at_5 { left: 0.2194 * $landscape_size; top: 0.0242 * $landscape_size }
+    .game_grid_0_2_at_5 { left: 0.4145 * $landscape_size; top: 0.0242 * $landscape_size }
+    .game_grid_0_3_at_5 { left: 0.6096 * $landscape_size; top: 0.0242 * $landscape_size }
+    .game_grid_0_4_at_5 { left: 0.8048 * $landscape_size; top: 0.0242 * $landscape_size }
+    .game_grid_1_0_at_5 { left: 0.0242 * $landscape_size; top: 0.2194 * $landscape_size }
+    .game_grid_1_1_at_5 { left: 0.2194 * $landscape_size; top: 0.2194 * $landscape_size }
+    .game_grid_1_2_at_5 { left: 0.4145 * $landscape_size; top: 0.2194 * $landscape_size }
+    .game_grid_1_3_at_5 { left: 0.6096 * $landscape_size; top: 0.2194 * $landscape_size }
+    .game_grid_1_4_at_5 { left: 0.8048 * $landscape_size; top: 0.2194 * $landscape_size }
+    .game_grid_2_0_at_5 { left: 0.0242 * $landscape_size; top: 0.4145 * $landscape_size }
+    .game_grid_2_1_at_5 { left: 0.2194 * $landscape_size; top: 0.4145 * $landscape_size }
+    .game_grid_2_2_at_5 { left: 0.4145 * $landscape_size; top: 0.4145 * $landscape_size }
+    .game_grid_2_3_at_5 { left: 0.6096 * $landscape_size; top: 0.4145 * $landscape_size }
+    .game_grid_2_4_at_5 { left: 0.8048 * $landscape_size; top: 0.4145 * $landscape_size }
+    .game_grid_3_0_at_5 { left: 0.0242 * $landscape_size; top: 0.6096 * $landscape_size }
+    .game_grid_3_1_at_5 { left: 0.2194 * $landscape_size; top: 0.6096 * $landscape_size }
+    .game_grid_3_2_at_5 { left: 0.4145 * $landscape_size; top: 0.6096 * $landscape_size }
+    .game_grid_3_3_at_5 { left: 0.6096 * $landscape_size; top: 0.6096 * $landscape_size }
+    .game_grid_3_4_at_5 { left: 0.8048 * $landscape_size; top: 0.6096 * $landscape_size }
+    .game_grid_4_0_at_5 { left: 0.0242 * $landscape_size; top: 0.8048 * $landscape_size }
+    .game_grid_4_1_at_5 { left: 0.2194 * $landscape_size; top: 0.8048 * $landscape_size }
+    .game_grid_4_2_at_5 { left: 0.4145 * $landscape_size; top: 0.8048 * $landscape_size }
+    .game_grid_4_3_at_5 { left: 0.6096 * $landscape_size; top: 0.8048 * $landscape_size }
+    .game_grid_4_4_at_5 { left: 0.8048 * $landscape_size; top: 0.8048 * $landscape_size }
   }
 
   @media all and (orientation:portrait) {
@@ -314,36 +337,73 @@ $portrait_size: 100vw;
       height: $portrait_size;
     }
 
-    .field {
-      line-height: 0.2125 * $portrait_size;
-      //margin: 0.03 * $portrait_size 0 0 0.03 * $portrait_size;
-      font-size: 0.11 * $portrait_size;
-    }
-    .v128 { font-size: 0.09 * $portrait_size }
-    .v256 { font-size: 0.09 * $portrait_size }
-    .v512 { font-size: 0.09 * $portrait_size }
-    .v1024 { font-size: 0.07 * $portrait_size }
-    .v2048 { font-size: 0.07 * $portrait_size }
-
     .game_over {
       line-height: $portrait_size;
     }
 
-    .game_grid_0_0_at_4 {  }
-    .game_grid_0_1_at_4 {  }
-    .game_grid_0_2_at_4 {  }
-    .game_grid_0_3_at_4 {  }
-    .game_grid_1_0_at_4 {  }
-    .game_grid_1_1_at_4 {  }
-    .game_grid_1_2_at_4 {  }
-    .game_grid_1_3_at_4 {  }
-    .game_grid_2_0_at_4 {  }
-    .game_grid_2_1_at_4 {  }
-    .game_grid_2_2_at_4 {  }
-    .game_grid_2_3_at_4 {  }
-    .game_grid_3_0_at_4 {  }
-    .game_grid_3_1_at_4 {  }
-    .game_grid_3_2_at_4 {  }
-    .game_grid_3_3_at_4 {  }
+    .field_at_4 {
+      line-height: 0.2125 * $portrait_size;
+      font-size: 0.11 * $portrait_size;
+    }
+
+    .field_at_5 {
+      line-height: 0.171 * $portrait_size;
+      font-size: 0.088 * $portrait_size;
+    }
+
+    .v128_at_4 { font-size: 0.09 * $portrait_size }
+    .v256_at_4 { font-size: 0.09 * $portrait_size }
+    .v512_at_4 { font-size: 0.09 * $portrait_size }
+    .v1024_at_4 { font-size: 0.07 * $portrait_size }
+    .v2048_at_4 { font-size: 0.07 * $portrait_size }
+
+    .v128_at_5 { font-size: 0.072 * $portrait_size }
+    .v256_at_5 { font-size: 0.072 * $portrait_size }
+    .v512_at_5 { font-size: 0.072 * $portrait_size }
+    .v1024_at_5 { font-size: 0.056 * $portrait_size }
+    .v2048_at_5 { font-size: 0.056 * $portrait_size }
+
+    .game_grid_0_0_at_4 { left: 0.03 * $portrait_size; top: 0.03 * $portrait_size }
+    .game_grid_0_1_at_4 { left: 0.2725 * $portrait_size; top: 0.03 * $portrait_size }
+    .game_grid_0_2_at_4 { left: 0.515 * $portrait_size; top: 0.03 * $portrait_size }
+    .game_grid_0_3_at_4 { left: 0.7575 * $portrait_size; top: 0.03 * $portrait_size }
+    .game_grid_1_0_at_4 { left: 0.03 * $portrait_size; top: 0.2725 * $portrait_size }
+    .game_grid_1_1_at_4 { left: 0.2725 * $portrait_size; top: 0.2725 * $portrait_size }
+    .game_grid_1_2_at_4 { left: 0.515 * $portrait_size; top: 0.2725 * $portrait_size }
+    .game_grid_1_3_at_4 { left: 0.7575 * $portrait_size; top: 0.2725 * $portrait_size }
+    .game_grid_2_0_at_4 { left: 0.03 * $portrait_size; top: 0.515 * $portrait_size }
+    .game_grid_2_1_at_4 { left: 0.2725 * $portrait_size; top: 0.515 * $portrait_size }
+    .game_grid_2_2_at_4 { left: 0.515 * $portrait_size; top: 0.515 * $portrait_size }
+    .game_grid_2_3_at_4 { left: 0.7575 * $portrait_size; top: 0.515 * $portrait_size }
+    .game_grid_3_0_at_4 { left: 0.03 * $portrait_size; top: 0.7575 * $portrait_size }
+    .game_grid_3_1_at_4 { left: 0.2725 * $portrait_size; top: 0.7575 * $portrait_size }
+    .game_grid_3_2_at_4 { left: 0.515 * $portrait_size; top: 0.7575 * $portrait_size }
+    .game_grid_3_3_at_4 { left: 0.7575 * $portrait_size; top: 0.7575 * $portrait_size }
+
+    .game_grid_0_0_at_5 { left: 0.0242 * $portrait_size; top: 0.0242 * $portrait_size }
+    .game_grid_0_1_at_5 { left: 0.2194 * $portrait_size; top: 0.0242 * $portrait_size }
+    .game_grid_0_2_at_5 { left: 0.4145 * $portrait_size; top: 0.0242 * $portrait_size }
+    .game_grid_0_3_at_5 { left: 0.6096 * $portrait_size; top: 0.0242 * $portrait_size }
+    .game_grid_0_4_at_5 { left: 0.8048 * $portrait_size; top: 0.0242 * $portrait_size }
+    .game_grid_1_0_at_5 { left: 0.0242 * $portrait_size; top: 0.2194 * $portrait_size }
+    .game_grid_1_1_at_5 { left: 0.2194 * $portrait_size; top: 0.2194 * $portrait_size }
+    .game_grid_1_2_at_5 { left: 0.4145 * $portrait_size; top: 0.2194 * $portrait_size }
+    .game_grid_1_3_at_5 { left: 0.6096 * $portrait_size; top: 0.2194 * $portrait_size }
+    .game_grid_1_4_at_5 { left: 0.8048 * $portrait_size; top: 0.2194 * $portrait_size }
+    .game_grid_2_0_at_5 { left: 0.0242 * $portrait_size; top: 0.4145 * $portrait_size }
+    .game_grid_2_1_at_5 { left: 0.2194 * $portrait_size; top: 0.4145 * $portrait_size }
+    .game_grid_2_2_at_5 { left: 0.4145 * $portrait_size; top: 0.4145 * $portrait_size }
+    .game_grid_2_3_at_5 { left: 0.6096 * $portrait_size; top: 0.4145 * $portrait_size }
+    .game_grid_2_4_at_5 { left: 0.8048 * $portrait_size; top: 0.4145 * $portrait_size }
+    .game_grid_3_0_at_5 { left: 0.0242 * $portrait_size; top: 0.6096 * $portrait_size }
+    .game_grid_3_1_at_5 { left: 0.2194 * $portrait_size; top: 0.6096 * $portrait_size }
+    .game_grid_3_2_at_5 { left: 0.4145 * $portrait_size; top: 0.6096 * $portrait_size }
+    .game_grid_3_3_at_5 { left: 0.6096 * $portrait_size; top: 0.6096 * $portrait_size }
+    .game_grid_3_4_at_5 { left: 0.8048 * $portrait_size; top: 0.6096 * $portrait_size }
+    .game_grid_4_0_at_5 { left: 0.0242 * $portrait_size; top: 0.8048 * $portrait_size }
+    .game_grid_4_1_at_5 { left: 0.2194 * $portrait_size; top: 0.8048 * $portrait_size }
+    .game_grid_4_2_at_5 { left: 0.4145 * $portrait_size; top: 0.8048 * $portrait_size }
+    .game_grid_4_3_at_5 { left: 0.6096 * $portrait_size; top: 0.8048 * $portrait_size }
+    .game_grid_4_4_at_5 { left: 0.8048 * $portrait_size; top: 0.8048 * $portrait_size }
   }
 }

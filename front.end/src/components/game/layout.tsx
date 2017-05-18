@@ -2,20 +2,21 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import * as ReactRouter from 'react-router';
 import { bindActionCreators } from 'redux';
-import {move, start} from '../../actions/game';
-import {DOWN, IFIELD, IGAME, LEFT, RIGHT, UP} from '../../constants';
+import {move, start, undo} from '../../actions/game';
+import {DOWN, IField, IGame, LEFT, RIGHT, UNDO, UP} from '../../constants';
 
 interface IProps {
-  game: IGAME;
+  game: IGame;
   dispatch: Function;
 }
 
-let rows = 4; // TODO: change
-let cols = 4;
-let cssSize = 4;
+const undoMax = 0;
+const rows = 5; // TODO: change
+const cols = 5;
+const cssSize = 5;
 class GameLayout extends React.Component<IProps, {}> {
   public componentDidMount() {
-    this.props.dispatch(start(rows, cols));
+    this.props.dispatch(start(rows, cols, undoMax));
     document.addEventListener('keyup', this.determineMove);
   }
   public render() {
@@ -31,7 +32,7 @@ class GameLayout extends React.Component<IProps, {}> {
         gameGrid.push(
           <div
           key={`game_grid_${row}_${col}`}
-          className={`field v0 game_grid_${row}_${col}_at_${cssSize}`}
+          className={`field field_at_${cssSize} v0 game_grid_${row}_${col}_at_${cssSize}`}
           />);
       }
     }
@@ -39,18 +40,29 @@ class GameLayout extends React.Component<IProps, {}> {
       <div key="GAME">
         <header>
           <ReactRouter.Link to="/" >
-            <button className="btn btn-primary" >
+            <button className="btn btn-outline-primary" >
               Home
             </button>
           </ReactRouter.Link>
           <button
-            className="btn btn-warning"
-            onClick={this.props.dispatch.bind(this, (start(rows, cols)))}>
+            className="btn btn-outline-danger"
+            onClick={this.props.dispatch.bind(
+              this,
+              (start(rows, cols, undoMax)),
+            )}>
             Restart
           </button>
           <button
-            className="btn btn-success disabled score" >
+            className="btn btn-outline-success disabled score" >
             {this.props.game.score}
+          </button>
+          <button
+            className="btn btn-outline-warning"
+            onClick={this.props.dispatch.bind(
+              this,
+              (undo()),
+            )}>
+            &larr;
           </button>
         </header>
         <div key="game_container" className="game_container">
@@ -58,8 +70,8 @@ class GameLayout extends React.Component<IProps, {}> {
             { gameGrid }
           </div>
           <div key="game_board" className="game_board">
-            {this.props.game.board.map((field: IFIELD, index: number) => {
-                let fieldClass = `field v${field.value}
+            {this.props.game.board.map((field: IField, index: number) => {
+                let fieldClass = `field field_at_${cssSize} v${field.value} v${field.value}_at_${cssSize}
                  game_grid_${field.row + field.direction[1]}_${field.col + field.direction[0]}_at_${cssSize}`;
                 if (field.merged === 1) { fieldClass += ` merged`; }
                 if (field.born) { fieldClass += ` born`; }

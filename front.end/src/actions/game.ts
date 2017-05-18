@@ -1,4 +1,4 @@
-import {IFIELD, IGAME, IREDUCEDGAME, MOVE, START} from '../constants';
+import {IField, IGame, IReducedGame, MOVE, START, UNDO} from '../constants';
 export const move = (direction: string) => {
   return {
     payload: direction,
@@ -6,10 +6,10 @@ export const move = (direction: string) => {
   };
 };
 
-export const newID = (game: IREDUCEDGAME, additionalTaken: number[]) => {
+export const newID = (game: IReducedGame, additionalTaken: number[]): number => {
   let ids: boolean[] = [];
   let id = 1;
-  game.board.map((field: IFIELD, index: number) => {
+  game.board.map((field: IField, index: number) => {
     ids[field.id] = true;
   });
   additionalTaken.map((takenId: number) => {
@@ -21,7 +21,7 @@ export const newID = (game: IREDUCEDGAME, additionalTaken: number[]) => {
   return id;
 };
 
-export const newSquare = (game: IREDUCEDGAME, id: number) => {
+export const newSquare = (game: IReducedGame, id: number): IReducedGame => {
   let zeros: boolean[][] = [];
   for (let rowIndex = 0; rowIndex < game.rows; rowIndex++) {
     zeros[rowIndex] = [];
@@ -29,7 +29,7 @@ export const newSquare = (game: IREDUCEDGAME, id: number) => {
       zeros[rowIndex][colIndex] = true;
     }
   }
-  game.board.map((field: IFIELD, index: number) => {
+  game.board.map((field: IField, index: number) => {
     if (field.merged !== -1) {
       zeros[field.row + field.direction[1]][field.col + field.direction[0]] = false;
     }
@@ -43,7 +43,7 @@ export const newSquare = (game: IREDUCEDGAME, id: number) => {
     }
   }
   let chosenField = zerosTuple[Math.floor((Math.random() * zerosTuple.length))];
-  let newField: IFIELD = {
+  let newField: IField = {
     born: true,
     col: chosenField.col,
     direction: [0, 0],
@@ -56,8 +56,8 @@ export const newSquare = (game: IREDUCEDGAME, id: number) => {
   return game;
 };
 
-export const start = (rows: number, cols: number) => {
-  let startReduced: IREDUCEDGAME = {
+export const start = (rows: number, cols: number, undoMax: number): {payload: IGame, type: string} => {
+  let startReduced: IReducedGame = {
     board: [],
     cols,
     direction: '',
@@ -67,9 +67,11 @@ export const start = (rows: number, cols: number) => {
   };
   startReduced = newSquare(startReduced, newID(startReduced, []));
   startReduced = newSquare(startReduced, newID(startReduced, []));
-  let startingSetUp: IGAME = {
+  let startingSetUp: IGame = {
     ...startReduced,
     allMoves: [],
+    undoCount: 0,
+    undoMax,
   };
 
   return {
@@ -78,3 +80,9 @@ export const start = (rows: number, cols: number) => {
   };
 };
 
+export const undo = () => {
+  return {
+    payload: '',
+    type: UNDO,
+  };
+};

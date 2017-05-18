@@ -4,24 +4,27 @@ export const UP = 'UP';
 export const DOWN = 'DOWN';
 export const LEFT = 'LEFT';
 export const RIGHT = 'RIGHT';
-export interface IGAME {
-  allMoves: IREDUCEDGAME[];
-  board: IFIELD[];
+export const UNDO = 'UNDO';
+export interface IReducedGame {
+  board: IField[];
   cols: number;
   direction: string;
   gameOver: boolean;
   rows: number;
   score: number;
 }
-export interface IREDUCEDGAME {
-  board: IFIELD[];
+export interface IGame {
+  allMoves: IReducedGame[];
+  board: IField[];
   cols: number;
   direction: string;
   gameOver: boolean;
   rows: number;
   score: number;
+  undoCount: number;
+  undoMax: number;
 }
-export interface IFIELD {
+export interface IField {
   born: boolean;
   col: number;
   direction: number[];
