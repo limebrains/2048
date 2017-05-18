@@ -1,6 +1,6 @@
 import { cloneDeep } from 'lodash';
 import {newID, newSquare} from '../actions/game';
-import {DOWN, IFIELD, IGAME, LEFT, MOVE, RIGHT, START, UP} from '../constants';
+import {DOWN, IFIELD, IGAME, IREDUCEDGAME, LEFT, MOVE, RIGHT, START, UP} from '../constants';
 
 const initialState: IGAME = {
   allMoves: [],
@@ -12,7 +12,7 @@ const initialState: IGAME = {
   score: 0,
 };
 
-const isOver = (game: IGAME): boolean => {
+const isOver = (game: IREDUCEDGAME): boolean => {
   let squareBoard: number[][] = [];
   for (let rowIndex = 0; rowIndex < game.rows; rowIndex++) {
     squareBoard[rowIndex] = [];
@@ -40,7 +40,7 @@ const isOver = (game: IGAME): boolean => {
 const compressLine = (line: IFIELD[],
                       byRows: boolean,
                       isInverted: boolean,
-                      gameOnlyForNewIds: IGAME): [boolean, IFIELD[], number, IFIELD[]] => {
+                      gameOnlyForNewIds: IREDUCEDGAME): [boolean, IFIELD[], number, IFIELD[]] => {
   let points = 0;
   let takenIds: number[] = [];
   let added: IFIELD[] = [];
@@ -142,7 +142,7 @@ const compressLine = (line: IFIELD[],
   return [changed, added, points, line];
 };
 
-const makeMoveForDirection = (game: IGAME, direction: string): [IGAME, number] => {
+const makeMoveForDirection = (game: IREDUCEDGAME, direction: string): [IREDUCEDGAME, number] => {
   let points = 0;
   let changed = false;
   let squareBoard: IFIELD[][] = [];
@@ -167,9 +167,6 @@ const makeMoveForDirection = (game: IGAME, direction: string): [IGAME, number] =
     }
   }
   game.board.map((field: IFIELD, index: number) => {
-    if (field.merged === -1) {
-      console.log('reducers/game.ts 168th line WTF?!');
-    }
     field.merged = 0;
     field.born = false;
     if (field.direction !== [0, 0]) {
@@ -242,9 +239,19 @@ const game = (state: IGAME = initialState, action: any): IGAME => {
   switch (action.type) {
     case MOVE:
       const direction = action.payload;
-      const gameAfterMove = makeMoveForDirection(cloneDeep(state), direction);
+      const reducedGame: IREDUCEDGAME = {
+        board: state.board,
+        cols: state.cols,
+        direction: state.direction,
+        gameOver: state.gameOver,
+        rows: state.rows,
+        score: state.score,
+      };
+      const gameAfterMove = makeMoveForDirection(cloneDeep(reducedGame), direction);
+      const newMoves = [...state.allMoves];
+      newMoves.push(reducedGame);
       return {
-        allMoves: state.allMoves.concat(action.payload),
+        allMoves: newMoves,
         board: gameAfterMove[0].board,
         cols: state.cols,
         direction: action.payload,
@@ -255,7 +262,7 @@ const game = (state: IGAME = initialState, action: any): IGAME => {
     case START:
       return action.payload;
     default:
-      return cloneDeep({...state});
+      return state;
   }
 };
 

@@ -1,4 +1,4 @@
-import {IFIELD, IGAME, MOVE, START} from '../constants';
+import {IFIELD, IGAME, IREDUCEDGAME, MOVE, START} from '../constants';
 export const move = (direction: string) => {
   return {
     payload: direction,
@@ -6,7 +6,7 @@ export const move = (direction: string) => {
   };
 };
 
-export const newID = (game: IGAME, additionalTaken: number[]) => {
+export const newID = (game: IREDUCEDGAME, additionalTaken: number[]) => {
   let ids: boolean[] = [];
   let id = 1;
   game.board.map((field: IFIELD, index: number) => {
@@ -21,7 +21,7 @@ export const newID = (game: IGAME, additionalTaken: number[]) => {
   return id;
 };
 
-export const newSquare = (game: IGAME, id: number) => {
+export const newSquare = (game: IREDUCEDGAME, id: number) => {
   let zeros: boolean[][] = [];
   for (let rowIndex = 0; rowIndex < game.rows; rowIndex++) {
     zeros[rowIndex] = [];
@@ -42,7 +42,6 @@ export const newSquare = (game: IGAME, id: number) => {
       }
     }
   }
-  if (zerosTuple.length === 0) { console.log('NO FREE FIELDS?!'); }
   let chosenField = zerosTuple[Math.floor((Math.random() * zerosTuple.length))];
   let newField: IFIELD = {
     born: true,
@@ -58,8 +57,7 @@ export const newSquare = (game: IGAME, id: number) => {
 };
 
 export const start = (rows: number, cols: number) => {
-  let startingSetUp: IGAME = {
-    allMoves: [],
+  let startReduced: IREDUCEDGAME = {
     board: [],
     cols,
     direction: '',
@@ -67,8 +65,12 @@ export const start = (rows: number, cols: number) => {
     rows,
     score: 0,
   };
-  startingSetUp = newSquare(startingSetUp, newID(startingSetUp, []));
-  startingSetUp = newSquare(startingSetUp, newID(startingSetUp, []));
+  startReduced = newSquare(startReduced, newID(startReduced, []));
+  startReduced = newSquare(startReduced, newID(startReduced, []));
+  let startingSetUp: IGAME = {
+    ...startReduced,
+    allMoves: [],
+  };
 
   return {
     payload: startingSetUp,

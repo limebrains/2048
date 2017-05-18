@@ -5,7 +5,15 @@ export const DOWN = 'DOWN';
 export const LEFT = 'LEFT';
 export const RIGHT = 'RIGHT';
 export interface IGAME {
-  allMoves: string[];
+  allMoves: IREDUCEDGAME[];
+  board: IFIELD[];
+  cols: number;
+  direction: string;
+  gameOver: boolean;
+  rows: number;
+  score: number;
+}
+export interface IREDUCEDGAME {
   board: IFIELD[];
   cols: number;
   direction: string;
