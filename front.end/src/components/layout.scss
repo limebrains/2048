@@ -245,14 +245,27 @@ $portrait_size: 90vw;
     @include transition(100ms ease-in-out);
   }
 
-  .field_at_4 {
-    width: 21.25%;
-    height: 21.25%;
-  }
+  $min_size: 4;
+  $max_size: 6;
+  $field_position: (
+                  (),
+                  (),
+                  (),
+                  (0.03, 0.2725, 0.515, 0.7575),
+                  (0.0242, 0.2194, 0.4145, 0.6096, 0.8048),
+                  (0.0202, 0.1835, 0.3468, 0.5101, 0.6734, 0.8367)
+  );
+  $field_sizes: (0, 0, 0, 21.25%, 17.1%, 14.31%);
+  $field_line_height: (0, 0, 0, 0.2125, 0.171, 0.1431);
+  $field_font_size: (0, 0, 0, 0.11, 0.088, 0.074);
+  $field_v_3_letters_font_size: (0, 0, 0, 0.09, 0.072, 0.06);
+  $field_v_4_letters_font_size: (0, 0, 0, 0.07, 0.056, 0.047);
 
-  .field_at_5 {
-    width: 17.1%;
-    height: 17.1%;
+  @for $i from $min_size through $max_size {
+    .field_at_#{$i} {
+      width: nth($field_sizes, $i);
+      height: nth($field_sizes, $i);
+    }
   }
 
   @media all and (orientation:landscape) {
@@ -265,70 +278,30 @@ $portrait_size: 90vw;
       line-height: $landscape_size;
     }
 
-    .field_at_4 {
-      line-height: 0.2125 * $landscape_size;
-      font-size: 0.11 * $landscape_size;
+    @for $i from $min_size through $max_size {
+      .field_at_#{$i} {
+        line-height: nth($field_line_height, $i) * $landscape_size;
+        font-size: nth($field_font_size, $i) * $landscape_size;
+      }
     }
 
-    .field_at_5 {
-      line-height: 0.171 * $landscape_size;
-      font-size: 0.088 * $landscape_size;
+    @for $i from $min_size through $max_size {
+      .v128_at_#{$i} { font-size: nth($field_v_3_letters_font_size, $i) * $landscape_size }
+      .v256_at_#{$i} { font-size: nth($field_v_3_letters_font_size, $i) * $landscape_size }
+      .v512_at_#{$i} { font-size: nth($field_v_3_letters_font_size, $i) * $landscape_size }
+      .v1024_at_#{$i} { font-size: nth($field_v_4_letters_font_size, $i) * $landscape_size }
+      .v2048_at_#{$i} { font-size: nth($field_v_4_letters_font_size, $i) * $landscape_size }
+
+      @for $j from 0 through $i - 1 {
+        @for $k from 0 through $i - 1 {
+          .game_grid_#{$j}_#{$k}_at_#{$i} {
+            left: nth(nth($field_position, $i), $j + 1) * $landscape_size;
+            top: nth(nth($field_position, $i), $k + 1) * $landscape_size;
+          }
+        }
+      }
     }
 
-    .v128_at_4 { font-size: 0.09 * $landscape_size }
-    .v256_at_4 { font-size: 0.09 * $landscape_size }
-    .v512_at_4 { font-size: 0.09 * $landscape_size }
-    .v1024_at_4 { font-size: 0.07 * $landscape_size }
-    .v2048_at_4 { font-size: 0.07 * $landscape_size }
-
-    .v128_at_5 { font-size: 0.072 * $landscape_size }
-    .v256_at_5 { font-size: 0.072 * $landscape_size }
-    .v512_at_5 { font-size: 0.072 * $landscape_size }
-    .v1024_at_5 { font-size: 0.056 * $landscape_size }
-    .v2048_at_5 { font-size: 0.056 * $landscape_size }
-
-    .game_grid_0_0_at_4 { left: 0.03 * $landscape_size; top: 0.03 * $landscape_size }
-    .game_grid_0_1_at_4 { left: 0.2725 * $landscape_size; top: 0.03 * $landscape_size }
-    .game_grid_0_2_at_4 { left: 0.515 * $landscape_size; top: 0.03 * $landscape_size }
-    .game_grid_0_3_at_4 { left: 0.7575 * $landscape_size; top: 0.03 * $landscape_size }
-    .game_grid_1_0_at_4 { left: 0.03 * $landscape_size; top: 0.2725 * $landscape_size }
-    .game_grid_1_1_at_4 { left: 0.2725 * $landscape_size; top: 0.2725 * $landscape_size }
-    .game_grid_1_2_at_4 { left: 0.515 * $landscape_size; top: 0.2725 * $landscape_size }
-    .game_grid_1_3_at_4 { left: 0.7575 * $landscape_size; top: 0.2725 * $landscape_size }
-    .game_grid_2_0_at_4 { left: 0.03 * $landscape_size; top: 0.515 * $landscape_size }
-    .game_grid_2_1_at_4 { left: 0.2725 * $landscape_size; top: 0.515 * $landscape_size }
-    .game_grid_2_2_at_4 { left: 0.515 * $landscape_size; top: 0.515 * $landscape_size }
-    .game_grid_2_3_at_4 { left: 0.7575 * $landscape_size; top: 0.515 * $landscape_size }
-    .game_grid_3_0_at_4 { left: 0.03 * $landscape_size; top: 0.7575 * $landscape_size }
-    .game_grid_3_1_at_4 { left: 0.2725 * $landscape_size; top: 0.7575 * $landscape_size }
-    .game_grid_3_2_at_4 { left: 0.515 * $landscape_size; top: 0.7575 * $landscape_size }
-    .game_grid_3_3_at_4 { left: 0.7575 * $landscape_size; top: 0.7575 * $landscape_size }
-
-    .game_grid_0_0_at_5 { left: 0.0242 * $landscape_size; top: 0.0242 * $landscape_size }
-    .game_grid_0_1_at_5 { left: 0.2194 * $landscape_size; top: 0.0242 * $landscape_size }
-    .game_grid_0_2_at_5 { left: 0.4145 * $landscape_size; top: 0.0242 * $landscape_size }
-    .game_grid_0_3_at_5 { left: 0.6096 * $landscape_size; top: 0.0242 * $landscape_size }
-    .game_grid_0_4_at_5 { left: 0.8048 * $landscape_size; top: 0.0242 * $landscape_size }
-    .game_grid_1_0_at_5 { left: 0.0242 * $landscape_size; top: 0.2194 * $landscape_size }
-    .game_grid_1_1_at_5 { left: 0.2194 * $landscape_size; top: 0.2194 * $landscape_size }
-    .game_grid_1_2_at_5 { left: 0.4145 * $landscape_size; top: 0.2194 * $landscape_size }
-    .game_grid_1_3_at_5 { left: 0.6096 * $landscape_size; top: 0.2194 * $landscape_size }
-    .game_grid_1_4_at_5 { left: 0.8048 * $landscape_size; top: 0.2194 * $landscape_size }
-    .game_grid_2_0_at_5 { left: 0.0242 * $landscape_size; top: 0.4145 * $landscape_size }
-    .game_grid_2_1_at_5 { left: 0.2194 * $landscape_size; top: 0.4145 * $landscape_size }
-    .game_grid_2_2_at_5 { left: 0.4145 * $landscape_size; top: 0.4145 * $landscape_size }
-    .game_grid_2_3_at_5 { left: 0.6096 * $landscape_size; top: 0.4145 * $landscape_size }
-    .game_grid_2_4_at_5 { left: 0.8048 * $landscape_size; top: 0.4145 * $landscape_size }
-    .game_grid_3_0_at_5 { left: 0.0242 * $landscape_size; top: 0.6096 * $landscape_size }
-    .game_grid_3_1_at_5 { left: 0.2194 * $landscape_size; top: 0.6096 * $landscape_size }
-    .game_grid_3_2_at_5 { left: 0.4145 * $landscape_size; top: 0.6096 * $landscape_size }
-    .game_grid_3_3_at_5 { left: 0.6096 * $landscape_size; top: 0.6096 * $landscape_size }
-    .game_grid_3_4_at_5 { left: 0.8048 * $landscape_size; top: 0.6096 * $landscape_size }
-    .game_grid_4_0_at_5 { left: 0.0242 * $landscape_size; top: 0.8048 * $landscape_size }
-    .game_grid_4_1_at_5 { left: 0.2194 * $landscape_size; top: 0.8048 * $landscape_size }
-    .game_grid_4_2_at_5 { left: 0.4145 * $landscape_size; top: 0.8048 * $landscape_size }
-    .game_grid_4_3_at_5 { left: 0.6096 * $landscape_size; top: 0.8048 * $landscape_size }
-    .game_grid_4_4_at_5 { left: 0.8048 * $landscape_size; top: 0.8048 * $landscape_size }
   }
 
   @media all and (orientation:portrait) {
@@ -341,69 +314,29 @@ $portrait_size: 90vw;
       line-height: $portrait_size;
     }
 
-    .field_at_4 {
-      line-height: 0.2125 * $portrait_size;
-      font-size: 0.11 * $portrait_size;
+    @for $i from $min_size through $max_size {
+      .field_at_#{$i} {
+        line-height: nth($field_line_height, $i) * $portrait_size;
+        font-size: nth($field_font_size, $i) * $portrait_size;
+      }
     }
 
-    .field_at_5 {
-      line-height: 0.171 * $portrait_size;
-      font-size: 0.088 * $portrait_size;
+    @for $i from $min_size through $max_size {
+      .v128_at_#{$i} { font-size: nth($field_v_3_letters_font_size, $i) * $portrait_size }
+      .v256_at_#{$i} { font-size: nth($field_v_3_letters_font_size, $i) * $portrait_size }
+      .v512_at_#{$i} { font-size: nth($field_v_3_letters_font_size, $i) * $portrait_size }
+      .v1024_at_#{$i} { font-size: nth($field_v_4_letters_font_size, $i) * $portrait_size }
+      .v2048_at_#{$i} { font-size: nth($field_v_4_letters_font_size, $i) * $portrait_size }
+
+      @for $j from 0 through $i - 1 {
+        @for $k from 0 through $i - 1 {
+          .game_grid_#{$j}_#{$k}_at_#{$i} {
+            left: nth(nth($field_position, $i), $j + 1) * $portrait_size;
+            top: nth(nth($field_position, $i), $k + 1) * $portrait_size;
+          }
+        }
+      }
     }
 
-    .v128_at_4 { font-size: 0.09 * $portrait_size }
-    .v256_at_4 { font-size: 0.09 * $portrait_size }
-    .v512_at_4 { font-size: 0.09 * $portrait_size }
-    .v1024_at_4 { font-size: 0.07 * $portrait_size }
-    .v2048_at_4 { font-size: 0.07 * $portrait_size }
-
-    .v128_at_5 { font-size: 0.072 * $portrait_size }
-    .v256_at_5 { font-size: 0.072 * $portrait_size }
-    .v512_at_5 { font-size: 0.072 * $portrait_size }
-    .v1024_at_5 { font-size: 0.056 * $portrait_size }
-    .v2048_at_5 { font-size: 0.056 * $portrait_size }
-
-    .game_grid_0_0_at_4 { left: 0.03 * $portrait_size; top: 0.03 * $portrait_size }
-    .game_grid_0_1_at_4 { left: 0.2725 * $portrait_size; top: 0.03 * $portrait_size }
-    .game_grid_0_2_at_4 { left: 0.515 * $portrait_size; top: 0.03 * $portrait_size }
-    .game_grid_0_3_at_4 { left: 0.7575 * $portrait_size; top: 0.03 * $portrait_size }
-    .game_grid_1_0_at_4 { left: 0.03 * $portrait_size; top: 0.2725 * $portrait_size }
-    .game_grid_1_1_at_4 { left: 0.2725 * $portrait_size; top: 0.2725 * $portrait_size }
-    .game_grid_1_2_at_4 { left: 0.515 * $portrait_size; top: 0.2725 * $portrait_size }
-    .game_grid_1_3_at_4 { left: 0.7575 * $portrait_size; top: 0.2725 * $portrait_size }
-    .game_grid_2_0_at_4 { left: 0.03 * $portrait_size; top: 0.515 * $portrait_size }
-    .game_grid_2_1_at_4 { left: 0.2725 * $portrait_size; top: 0.515 * $portrait_size }
-    .game_grid_2_2_at_4 { left: 0.515 * $portrait_size; top: 0.515 * $portrait_size }
-    .game_grid_2_3_at_4 { left: 0.7575 * $portrait_size; top: 0.515 * $portrait_size }
-    .game_grid_3_0_at_4 { left: 0.03 * $portrait_size; top: 0.7575 * $portrait_size }
-    .game_grid_3_1_at_4 { left: 0.2725 * $portrait_size; top: 0.7575 * $portrait_size }
-    .game_grid_3_2_at_4 { left: 0.515 * $portrait_size; top: 0.7575 * $portrait_size }
-    .game_grid_3_3_at_4 { left: 0.7575 * $portrait_size; top: 0.7575 * $portrait_size }
-
-    .game_grid_0_0_at_5 { left: 0.0242 * $portrait_size; top: 0.0242 * $portrait_size }
-    .game_grid_0_1_at_5 { left: 0.2194 * $portrait_size; top: 0.0242 * $portrait_size }
-    .game_grid_0_2_at_5 { left: 0.4145 * $portrait_size; top: 0.0242 * $portrait_size }
-    .game_grid_0_3_at_5 { left: 0.6096 * $portrait_size; top: 0.0242 * $portrait_size }
-    .game_grid_0_4_at_5 { left: 0.8048 * $portrait_size; top: 0.0242 * $portrait_size }
-    .game_grid_1_0_at_5 { left: 0.0242 * $portrait_size; top: 0.2194 * $portrait_size }
-    .game_grid_1_1_at_5 { left: 0.2194 * $portrait_size; top: 0.2194 * $portrait_size }
-    .game_grid_1_2_at_5 { left: 0.4145 * $portrait_size; top: 0.2194 * $portrait_size }
-    .game_grid_1_3_at_5 { left: 0.6096 * $portrait_size; top: 0.2194 * $portrait_size }
-    .game_grid_1_4_at_5 { left: 0.8048 * $portrait_size; top: 0.2194 * $portrait_size }
-    .game_grid_2_0_at_5 { left: 0.0242 * $portrait_size; top: 0.4145 * $portrait_size }
-    .game_grid_2_1_at_5 { left: 0.2194 * $portrait_size; top: 0.4145 * $portrait_size }
-    .game_grid_2_2_at_5 { left: 0.4145 * $portrait_size; top: 0.4145 * $portrait_size }
-    .game_grid_2_3_at_5 { left: 0.6096 * $portrait_size; top: 0.4145 * $portrait_size }
-    .game_grid_2_4_at_5 { left: 0.8048 * $portrait_size; top: 0.4145 * $portrait_size }
-    .game_grid_3_0_at_5 { left: 0.0242 * $portrait_size; top: 0.6096 * $portrait_size }
-    .game_grid_3_1_at_5 { left: 0.2194 * $portrait_size; top: 0.6096 * $portrait_size }
-    .game_grid_3_2_at_5 { left: 0.4145 * $portrait_size; top: 0.6096 * $portrait_size }
-    .game_grid_3_3_at_5 { left: 0.6096 * $portrait_size; top: 0.6096 * $portrait_size }
-    .game_grid_3_4_at_5 { left: 0.8048 * $portrait_size; top: 0.6096 * $portrait_size }
-    .game_grid_4_0_at_5 { left: 0.0242 * $portrait_size; top: 0.8048 * $portrait_size }
-    .game_grid_4_1_at_5 { left: 0.2194 * $portrait_size; top: 0.8048 * $portrait_size }
-    .game_grid_4_2_at_5 { left: 0.4145 * $portrait_size; top: 0.8048 * $portrait_size }
-    .game_grid_4_3_at_5 { left: 0.6096 * $portrait_size; top: 0.8048 * $portrait_size }
-    .game_grid_4_4_at_5 { left: 0.8048 * $portrait_size; top: 0.8048 * $portrait_size }
   }
 }
