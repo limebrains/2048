@@ -13,6 +13,7 @@
     "alwaysStrict": true,
     "importHelpers": true,
     "emitDecoratorMetadata": true,
+    "skipLibCheck": true,
     "experimentalDecorators": true,
     "lib": [
       "dom",

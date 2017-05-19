@@ -24,7 +24,7 @@ class Routes extends React.Component<{}, {}> {
         <Router history={ history }>
           <Route path={ urlPrefix } component={ Layout }>
             <IndexRoute component={ Home }/>
-            <Route path="game" component={ Game }/>
+            <Route path="game(/:slug)" component={ Game }/>
           </Route>
           <Route path="*" component={ NotFound }/>
         </Router>

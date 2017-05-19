@@ -1,6 +1,8 @@
 import { cloneDeep } from 'lodash';
-import {newID, newSquare} from '../actions/game';
-import {DOWN, IField, IGame, IReducedGame, LEFT, MOVE, RIGHT, START, UNDO, UP} from '../constants';
+import {start, newID, newSquare} from '../actions/game';
+import {
+  DOWN, FETCH_GAME_SUCCESS, IField, IGame, IReducedGame, LEFT, MOVE, RIGHT, START, UNDO, UP,
+} from '../constants';
 
 const initialState: IGame = {
   allMoves: [],
@@ -280,6 +282,33 @@ const game = (state: IGame = initialState, action: any): IGame => {
         undoCount: state.undoCount + 1,
         undoMax: state.undoMax,
       };
+    case FETCH_GAME_SUCCESS:
+      let started: any = { payload: {
+        allMoves: [],
+        board: [],
+        cols: 0,
+        direction: '',
+        gameOver: false,
+        rows: 0,
+        score: 0,
+        undoCount: 0,
+        undoMax: 0,
+      }};
+      let slugNotResolved = true;
+      Object.keys(action.payload.data).reduce((previous: any, current: any) => {
+        if (action.payload.data[current].slug === action.slug) {
+          slugNotResolved = false;
+          started = start(
+            action.payload.data[current].rows,
+            action.payload.data[current].cols,
+            0,
+          );
+        }
+      }, {});
+      if (started.payload.cols === 0) {
+        started = start(4, 4, 0);
+      }
+      return { ...state, ...started.payload, slugNotResolved };
     default:
       return state;
   }

@@ -1,4 +1,16 @@
-import {IField, IGame, IReducedGame, MOVE, START, UNDO} from '../constants';
+import axios from 'axios';
+import {
+  FETCHING_GAME,
+  FETCH_GAME_START,
+  FETCH_GAME_ERROR,
+  FETCH_GAME_SUCCESS,
+  IField,
+  IGame,
+  IReducedGame,
+  MOVE,
+  START,
+  UNDO,
+} from '../constants';
 export const move = (direction: string) => {
   return {
     payload: direction,
@@ -84,5 +96,33 @@ export const undo = () => {
   return {
     payload: '',
     type: UNDO,
+  };
+};
+
+export const fetchGame = (dispatch: any, slug: any) => {
+  axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
+  let request: any = axios.get(`http://127.0.0.1:8000/v1/game/?format=json`).then((success) => {
+    dispatch(fetchGameSuccess(success, slug));
+  }).catch((error) => {
+    dispatch(fetchGameError(error));
+  });
+
+  return {
+    type: FETCH_GAME_START,
+  };
+};
+
+export const fetchGameSuccess = (data: any, slug: any) => {
+  return {
+    payload: data,
+    slug,
+    type: FETCH_GAME_SUCCESS,
+  };
+};
+
+export const fetchGameError = (data: any) => {
+  return {
+    payload: data,
+    type: FETCH_GAME_ERROR,
   };
 };

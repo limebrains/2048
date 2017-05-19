@@ -2,29 +2,43 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import * as ReactRouter from 'react-router';
 import { bindActionCreators } from 'redux';
-import {move, start, undo} from '../../actions/game';
-import {DOWN, IField, IGame, LEFT, RIGHT, UNDO, UP} from '../../constants';
+import {fetchGame, move, start, undo} from '../../actions/game';
+import {DOWN, IField, IGame, LEFT, RIGHT, UP} from '../../constants';
 
 interface IProps {
   game: IGame;
+  params: { slug: string };
+  fetchedSettings: any;
   dispatch: Function;
 }
-
-const undoMax = 0;
-const rows = 5; // TODO: change
-const cols = 5;
-const cssSize = 5;
+let undoMax = 0;
+let rows = 4;
+let cols = 4;
 class GameLayout extends React.Component<IProps, {}> {
   public componentDidMount() {
-    this.props.dispatch(start(rows, cols, undoMax));
+    if (this.props.params.slug) {
+      this.props.dispatch(fetchGame(this.props.dispatch, this.props.params.slug));
+      if (this.props.fetchedSettings && this.props.fetchedSettings[this.props.params.slug]) {
+        cols = this.props.fetchedSettings[this.props.params.slug].cols;
+        rows = this.props.fetchedSettings[this.props.params.slug].rows;
+      }
+    } else {
+      this.props.dispatch(start(rows, cols, undoMax));
+    }
     document.addEventListener('keyup', this.determineMove);
   }
   public render() {
+    let cssSize = this.props.game.rows > this.props.game.cols ? this.props.game.rows : this.props.game.cols;
     let message: JSX.Element;
     let gameGrid: JSX.Element[] = [];
     if (this.props.game.gameOver) {
       message = (
         <div className="game_over">GAME OVER</div>
+      );
+    }
+    if (this.props.game.slugNotResolved) {
+      message = (
+        <div className="game_over">GAME NOT FOUND</div>
       );
     }
     for (let row = 0; row < this.props.game.rows; row++) {

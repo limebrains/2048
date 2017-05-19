@@ -20,6 +20,8 @@ const reducer = combineReducers({
   ...reducers,
 });
 
+// const promise = require('redux-promise');
+
 const configuredLogger = logger.createLogger({
   // ...options
 });
@@ -29,6 +31,7 @@ function configureStore(initialState: any): any {
   // Initial the redux devtools for Chrome
   // https://github.com/zalmoxisus/redux-devtools-extension/
   const createdStore = createStore(reducer, initialState, compose(
+    // applyMiddleware(promise),TODO: redux-promise
     applyMiddleware(configuredLogger),
     window.devToolsExtension ? window.devToolsExtension() : (f: any) => f,
   ));
