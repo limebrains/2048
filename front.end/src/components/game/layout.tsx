@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import * as ReactRouter from 'react-router';
+import * as Swipeable from 'react-swipeable';
 import { bindActionCreators } from 'redux';
 import {fetchGame, move, start, undo} from '../../actions/game';
 import {DOWN, IField, IGame, LEFT, RIGHT, UP} from '../../constants';
@@ -53,57 +54,77 @@ class GameLayout extends React.Component<IProps, {}> {
       }
     }
     return (
-      <div key="GAME">
-        <header>
-          <ReactRouter.Link to="/" >
-            <button className="btn btn-outline-primary" >
-              Home
+      <Swipeable onSwiped={this.swiped} >
+        <div key="GAME">
+          <header>
+            <ReactRouter.Link to="/" >
+              <button className="btn btn-outline-primary" >
+                Home
+              </button>
+            </ReactRouter.Link>
+            <button
+              className="btn btn-outline-danger"
+              onClick={this.props.dispatch.bind(
+                this,
+                (start(rows, cols, undoMax)),
+              )}>
+              Restart
             </button>
-          </ReactRouter.Link>
-          <button
-            className="btn btn-outline-danger"
-            onClick={this.props.dispatch.bind(
-              this,
-              (start(rows, cols, undoMax)),
-            )}>
-            Restart
-          </button>
-          <button
-            className="btn btn-outline-success disabled score" >
-            {this.props.game.score}
-          </button>
-          <button
-            className="btn btn-outline-warning"
-            onClick={this.props.dispatch.bind(
-              this,
-              (undo()),
-            )}>
-            &larr;
-          </button>
-        </header>
-        <div key="game_container" className={`game_container
-        game_container_at_${this.props.game.rows}_by_${this.props.game.cols}`}>
-          <div key="game_grid" className="game_grid">
-            { gameGrid }
-          </div>
-          <div key="game_board" className="game_board">
-            {this.props.game.board.map((field: IField, index: number) => {
-                let fieldClass = `field field_at_${cssSize} v${field.value} v${field.value}_at_${cssSize}
-                 game_grid_${field.row + field.direction[1]}_${field.col + field.direction[0]}_at_${cssSize}`;
-                if (field.merged === 1) { fieldClass += ` merged`; }
-                if (field.born) { fieldClass += ` born`; }
-                return (
-                  <div key={field.id} className={fieldClass} >{field.value}</div>
-                );
-              })
-            }
-            { message }
+            <button
+              className="btn btn-outline-success disabled score" >
+              {this.props.game.score}
+            </button>
+            <button
+              className="btn btn-outline-warning"
+              onClick={this.props.dispatch.bind(
+                this,
+                (undo()),
+              )}>
+              &larr;
+            </button>
+          </header>
+          <div key="game_container" className={`game_container
+          game_container_at_${this.props.game.rows}_by_${this.props.game.cols}`}>
+            <div key="game_grid" className="game_grid">
+              { gameGrid }
+            </div>
+            <div key="game_board" className="game_board">
+              {this.props.game.board.map((field: IField, index: number) => {
+                  let fieldClass = `field field_at_${cssSize} v${field.value} v${field.value}_at_${cssSize}
+                   game_grid_${field.row + field.direction[1]}_${field.col + field.direction[0]}_at_${cssSize}`;
+                  if (field.merged === 1) { fieldClass += ` merged`; }
+                  if (field.born) { fieldClass += ` born`; }
+                  return (
+                    <div key={field.id} className={fieldClass} >{field.value}</div>
+                  );
+                })
+              }
+              { message }
+            </div>
           </div>
         </div>
-      </div>
+      </Swipeable>
     );
   }
 
+  private swiped = (e: any, deltaX: number, deltaY: number, isFlick: any, velocity: any) => {
+    if (this.props.game.gameOver) {
+      return 0;
+    }
+    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+      if (deltaX > 0) {
+        this.props.dispatch(move(LEFT));
+      } else {
+        this.props.dispatch(move(RIGHT));
+      }
+    } else {
+      if (deltaY > 0) {
+        this.props.dispatch(move(UP));
+      } else {
+        this.props.dispatch(move(DOWN));
+      }
+    }
+  }
   private determineMove = (e: any) => {
     if (this.props.game.gameOver) {
       return 0;
