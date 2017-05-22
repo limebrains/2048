@@ -33,12 +33,14 @@ class GameLayout extends React.Component<IProps, {}> {
     let gameGrid: JSX.Element[] = [];
     if (this.props.game.gameOver) {
       message = (
-        <div className="game_over">GAME OVER</div>
+        <div className={`game_over
+         game_over_at_${this.props.game.rows}_by_${this.props.game.cols}`}>GAME OVER</div>
       );
     }
     if (this.props.game.slugNotResolved) {
       message = (
-        <div className="game_over">GAME NOT FOUND</div>
+        <div className={`game_over
+         game_over_at_${this.props.game.rows}_by_${this.props.game.cols}`}>GAME NOT FOUND</div>
       );
     }
     for (let row = 0; row < this.props.game.rows; row++) {
@@ -79,7 +81,8 @@ class GameLayout extends React.Component<IProps, {}> {
             &larr;
           </button>
         </header>
-        <div key="game_container" className="game_container">
+        <div key="game_container" className={`game_container
+        game_container_at_${this.props.game.rows}_by_${this.props.game.cols}`}>
           <div key="game_grid" className="game_grid">
             { gameGrid }
           </div>

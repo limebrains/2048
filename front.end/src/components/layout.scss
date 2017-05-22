@@ -249,39 +249,53 @@ $portrait_size: 90vw;
   $max_size: 6;
   $field_position: (
                   (),
-                  (),
-                  (),
-                  (0.03, 0.2725, 0.515, 0.7575),
-                  (0.0242, 0.2194, 0.4145, 0.6096, 0.8048),
-                  (0.0202, 0.1835, 0.3468, 0.5101, 0.6734, 0.8367)
+                  (0.0582, 0.5291, 1),
+                  (0.0397, 0.3598, 0.6799, 1),
+                  (0.03, 0.2725, 0.515, 0.7575, 1),
+                  (0.0242, 0.2194, 0.4145, 0.6096, 0.8048, 1),
+                  (0.0202, 0.1835, 0.3468, 0.5101, 0.6734, 0.8367, 1)
   );
-  $field_sizes: (0, 0, 0, 21.25%, 17.1%, 14.31%);
+  $field_sizes: (0, 0, 0, 0.2125, 0.171, 0.1431);
   $field_line_height: (0, 0, 0, 0.2125, 0.171, 0.1431);
   $field_font_size: (0, 0, 0, 0.11, 0.088, 0.074);
   $field_v_3_letters_font_size: (0, 0, 0, 0.09, 0.072, 0.06);
   $field_v_4_letters_font_size: (0, 0, 0, 0.07, 0.056, 0.047);
 
-  @for $i from $min_size through $max_size {
-    .field_at_#{$i} {
-      width: nth($field_sizes, $i);
-      height: nth($field_sizes, $i);
-    }
-  }
+  // TODO: GAME OVER JUST LIKE GAME CONTAINER BELOW
 
   @media all and (orientation:landscape) {
-    .game_container {
-      width: $landscape_size;
-      height: $landscape_size;
+    @for $i from 2 through $max_size {
+      @for $j from 2 through $max_size {
+        .game_container_at_#{$i}_by_#{$j} {
+          @if $i > $j {
+            width: nth(nth($field_position, $i), $j + 1) * $landscape_size;
+            height: nth(nth($field_position, $i), $i + 1) * $landscape_size;
+          } @else {
+            width: nth(nth($field_position, $j), $j + 1) * $landscape_size;
+            height: nth(nth($field_position, $j), $i + 1) * $landscape_size;
+          }
+        }
+      }
     }
 
-    .game_over {
-      line-height: $landscape_size;
+    @for $i from 2 through $max_size {
+      @for $j from 2 through $max_size {
+        .game_over_at_#{$i}_by_#{$j} {
+          @if $i > $j {
+            line-height: $landscape_size;
+          } @else {
+            line-height: nth(nth($field_position, $j), $i + 1) * $landscape_size;
+          }
+        }
+      }
     }
 
     @for $i from $min_size through $max_size {
       .field_at_#{$i} {
         line-height: nth($field_line_height, $i) * $landscape_size;
         font-size: nth($field_font_size, $i) * $landscape_size;
+        width: nth($field_sizes, $i) * $landscape_size;
+        height: nth($field_sizes, $i) * $landscape_size;
       }
     }
 
@@ -295,8 +309,8 @@ $portrait_size: 90vw;
       @for $j from 0 through $i - 1 {
         @for $k from 0 through $i - 1 {
           .game_grid_#{$j}_#{$k}_at_#{$i} {
-            left: nth(nth($field_position, $i), $j + 1) * $landscape_size;
-            top: nth(nth($field_position, $i), $k + 1) * $landscape_size;
+            left: nth(nth($field_position, $i), $k + 1) * $landscape_size;
+            top: nth(nth($field_position, $i), $j + 1) * $landscape_size;
           }
         }
       }
@@ -305,19 +319,38 @@ $portrait_size: 90vw;
   }
 
   @media all and (orientation:portrait) {
-    .game_container {
-      width: $portrait_size;
-      height: $portrait_size;
+    @for $i from 2 through $max_size {
+      @for $j from 2 through $max_size {
+        .game_container_at_#{$i}_by_#{$j} {
+          @if $i > $j {
+            width: nth(nth($field_position, $i), $j + 1) * $portrait_size;
+            height: nth(nth($field_position, $i), $i + 1) * $portrait_size;
+          } @else {
+            width: nth(nth($field_position, $j), $j + 1) * $portrait_size;
+            height: nth(nth($field_position, $j), $i + 1) * $portrait_size;
+          }
+        }
+      }
     }
 
-    .game_over {
-      line-height: $portrait_size;
+    @for $i from 2 through $max_size {
+      @for $j from 2 through $max_size {
+        .game_over_at_#{$i}_by_#{$j} {
+          @if $i > $j {
+            line-height: $portrait_size;
+          } @else {
+            line-height: nth(nth($field_position, $j), $i + 1) * $portrait_size;
+          }
+        }
+      }
     }
 
     @for $i from $min_size through $max_size {
       .field_at_#{$i} {
         line-height: nth($field_line_height, $i) * $portrait_size;
         font-size: nth($field_font_size, $i) * $portrait_size;
+        width: nth($field_sizes, $i) * $portrait_size;
+        height: nth($field_sizes, $i) * $portrait_size;
       }
     }
 
@@ -331,8 +364,8 @@ $portrait_size: 90vw;
       @for $j from 0 through $i - 1 {
         @for $k from 0 through $i - 1 {
           .game_grid_#{$j}_#{$k}_at_#{$i} {
-            left: nth(nth($field_position, $i), $j + 1) * $portrait_size;
-            top: nth(nth($field_position, $i), $k + 1) * $portrait_size;
+            left: nth(nth($field_position, $i), $k + 1) * $portrait_size;
+            top: nth(nth($field_position, $i), $j + 1) * $portrait_size;
           }
         }
       }
