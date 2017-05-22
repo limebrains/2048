@@ -16,28 +16,61 @@ class HomeLayout extends React.Component<IProps, {}> {
   }
   public render() {
     let settings: JSX.Element[];
+    let chosenSetting: JSX.Element;
     if (this.props.game.settings) {
       settings = this.props.game.settings.map((setting: ISetting, index: number) => {
         return (
-          <Link to={`game/${setting.slug}`} >
-            <div key={setting.id} className="" >
-              sadsdasdasdashbvhsvbvdsbvdbvhsdvbhshvbsdhvkbsdvhsdbvhsdvdsdjadhjbsdhasbdssdasdasdasdasda
-              slug: { setting.slug }
-              cols: { setting.cols }
-              rows: { setting.rows }
-              maxTotalUndo: { setting.maxTotalUndo }
-              maxUndoInARow: { setting.maxUndoInARow }
-              mergingRule: { setting.mergingRule }
-              startingBoard: { setting.startingBoard }
+          <div>
+            <Link to={`game/${setting.slug}`} >
+              <button className="btn btn-primary btn-lg btn-block play" >
+                Play
+              </button>
+            </Link>
+            <div key={setting.id} >
+              <p>slug: { setting.slug }</p>
+              <p>cols: { setting.cols }</p>
+              <p>rows: { setting.rows }</p>
+              <p>maxTotalUndo: { setting.maxTotalUndo }</p>
+              <p>maxUndoInARow: { setting.maxUndoInARow }</p>
+              <p>mergingRule: { setting.mergingRule }</p>
+              <p>startingBoard: { setting.startingBoard }</p>
             </div>
-          </Link>
+          </div>
         );
       });
+    }
+    if (this.props.game.chosenSetting) {
+      chosenSetting = (
+        <div>
+          <Link to={`game/${this.props.game.chosenSetting.slug}`} >
+            <button className="btn btn-primary btn-lg btn-block play" >
+              Play
+            </button>
+          </Link>
+          <div>
+            <p>slug: { this.props.game.chosenSetting.slug }</p>
+            <p>cols: { this.props.game.chosenSetting.cols }</p>
+            <p>rows: { this.props.game.chosenSetting.rows }</p>
+            <p>maxTotalUndo: { this.props.game.chosenSetting.maxTotalUndo }</p>
+            <p>maxUndoInARow: { this.props.game.chosenSetting.maxUndoInARow }</p>
+            <p>mergingRule: { this.props.game.chosenSetting.mergingRule }</p>
+            <p>startingBoard: { this.props.game.chosenSetting.startingBoard }</p>
+          </div>
+        </div>
+      );
+    } else {
+      chosenSetting = (
+        <Link to="game/222" >
+          <button className="btn btn-primary btn-lg btn-block play" >
+            Play
+          </button>
+        </Link>
+      );
     }
     return (
       <div className="row">
         <div key="chosenSetting" className="col-6">
-          <Link to="game/222" ><button className="btn btn-primary btn-lg btn-block play" >Play</button></Link>
+          { chosenSetting }
         </div>
         <div key="allSettings" className="col-6">
           { settings }

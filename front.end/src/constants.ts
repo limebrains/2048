@@ -28,6 +28,7 @@ export interface IGame {
   rows: number;
   score: number;
   settings?: ISetting[];
+  chosenSetting?: ISetting;
   slugNotResolved?: boolean;
   undoCount: number;
   undoMax: number;

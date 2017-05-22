@@ -34,6 +34,44 @@
 $landscape_size: 80vh;
 $portrait_size: 90vw;
 
+$container_background_color: #776e65;
+
+$game_container_background_color: #bbada0;
+
+$field_text_color_black: #776e65;
+$field_text_color_white: #f9f6f2;
+
+$field_background_color_0: #cdc1b4;
+$field_background_color_2: #eee4da;
+$field_background_color_4: #ede0c8;
+$field_background_color_8: #f2b179;
+$field_background_color_16: #f59563;
+$field_background_color_32: #f67c5f;
+$field_background_color_64: #f65e3b;
+$field_background_color_128: #edcf72;
+$field_background_color_256: #edcc61;
+$field_background_color_512: #edc850;
+$field_background_color_1024: #edc53f;
+$field_background_color_2048: #edc22e;
+
+$game_over_background_color: rgba(238, 228, 218, 0.73);
+
+$min_size: 4;
+$max_size: 6;
+$field_position: (
+                (),
+                (0.0582, 0.5291, 1),
+                (0.0397, 0.3598, 0.6799, 1),
+                (0.03, 0.2725, 0.515, 0.7575, 1),
+                (0.0242, 0.2194, 0.4145, 0.6096, 0.8048, 1),
+                (0.0202, 0.1835, 0.3468, 0.5101, 0.6734, 0.8367, 1)
+);
+$field_sizes: (0, 0, 0, 0.2125, 0.171, 0.1431);
+$field_line_height: (0, 0, 0, 0.2125, 0.171, 0.1431);
+$field_font_size: (0, 0, 0, 0.11, 0.088, 0.074);
+$field_v_3_letters_font_size: (0, 0, 0, 0.09, 0.072, 0.06);
+$field_v_4_letters_font_size: (0, 0, 0, 0.07, 0.056, 0.047);
+
 
 @-webkit-keyframes fade-in {
   0% {
@@ -154,14 +192,16 @@ $portrait_size: 90vw;
     -ms-transform: scale(1);
     transform: scale(1); } }
 
+body { margin: 0 }
+
 .container {
   margin: 0;
   padding: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
   font-size: 18px;
-  color: #776e65;
+  color: $container_background_color;
 
   header {
     text-align: center;
@@ -186,22 +226,22 @@ $portrait_size: 90vw;
 
     .game_container {
       margin: auto;
-      background: #bbada0;
+      background: $game_container_background_color;
       position: relative;
       border-radius: 1.2%;
 
-      .v0 { z-index: 1; color: #776e65; background: #cdc1b4; }
-      .v2 { z-index: 2; color: #776e65; background: #eee4da; }
-      .v4 { z-index: 2; color: #776e65; background: #ede0c8; }
-      .v8 { z-index: 2; color: #f9f6f2; background: #f2b179; }
-      .v16 { z-index: 2; color: #f9f6f2; background: #f59563; }
-      .v32 { z-index: 2; color: #f9f6f2; background: #f67c5f; }
-      .v64 { z-index: 2; color: #f9f6f2; background: #f65e3b; }
-      .v128 { z-index: 2; color: #f9f6f2; background: #edcf72; }
-      .v256 { z-index: 2; color: #f9f6f2; background: #edcc61; }
-      .v512 { z-index: 2; color: #f9f6f2; background: #edc850; }
-      .v1024 { z-index: 2; color: #f9f6f2; background: #edc53f; }
-      .v2048 { z-index: 2; color: #f9f6f2; background: #edc22e; }
+      .v0 { z-index: 1; color: $field_text_color_black; background: $field_background_color_0; }
+      .v2 { z-index: 2; color: $field_text_color_black; background: $field_background_color_2; }
+      .v4 { z-index: 2; color: $field_text_color_black; background: $field_background_color_4; }
+      .v8 { z-index: 2; color: $field_text_color_white; background: $field_background_color_8; }
+      .v16 { z-index: 2; color: $field_text_color_white; background: $field_background_color_16; }
+      .v32 { z-index: 2; color: $field_text_color_white; background: $field_background_color_32; }
+      .v64 { z-index: 2; color: $field_text_color_white; background: $field_background_color_64; }
+      .v128 { z-index: 2; color: $field_text_color_white; background: $field_background_color_128; }
+      .v256 { z-index: 2; color: $field_text_color_white; background: $field_background_color_256; }
+      .v512 { z-index: 2; color: $field_text_color_white; background: $field_background_color_512; }
+      .v1024 { z-index: 2; color: $field_text_color_white; background: $field_background_color_1024; }
+      .v2048 { z-index: 2; color: $field_text_color_white; background: $field_background_color_2048; }
 
       .game_over {
         z-index: 3;
@@ -210,7 +250,7 @@ $portrait_size: 90vw;
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(238, 228, 218, 0.73);
+        background: $game_over_background_color;
         overflow: hidden;
         text-align: center;
         font-weight: bold;
@@ -239,22 +279,6 @@ $portrait_size: 90vw;
     @include transition-property(transform);
     @include transition(100ms ease-in-out);
   }
-
-  $min_size: 4;
-  $max_size: 6;
-  $field_position: (
-                  (),
-                  (0.0582, 0.5291, 1),
-                  (0.0397, 0.3598, 0.6799, 1),
-                  (0.03, 0.2725, 0.515, 0.7575, 1),
-                  (0.0242, 0.2194, 0.4145, 0.6096, 0.8048, 1),
-                  (0.0202, 0.1835, 0.3468, 0.5101, 0.6734, 0.8367, 1)
-  );
-  $field_sizes: (0, 0, 0, 0.2125, 0.171, 0.1431);
-  $field_line_height: (0, 0, 0, 0.2125, 0.171, 0.1431);
-  $field_font_size: (0, 0, 0, 0.11, 0.088, 0.074);
-  $field_v_3_letters_font_size: (0, 0, 0, 0.09, 0.072, 0.06);
-  $field_v_4_letters_font_size: (0, 0, 0, 0.07, 0.056, 0.047);
 
   @media all and (orientation:landscape) {
     @for $i from 2 through $max_size {

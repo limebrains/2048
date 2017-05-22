@@ -7,6 +7,7 @@ import {fetchGame, move, start, undo} from '../../actions/game';
 import {DOWN, IField, IGame, LEFT, RIGHT, UP} from '../../constants';
 
 interface IProps {
+  start: Function;
   game: IGame;
   params: { slug: string };
   fetchedSettings: any;
@@ -27,6 +28,9 @@ class GameLayout extends React.Component<IProps, {}> {
       this.props.dispatch(start(rows, cols, undoMax));
     }
     document.addEventListener('keyup', this.determineMove);
+  }
+  public componentWillUnmount() {
+    document.removeEventListener('keyup', this.determineMove);
   }
   public render() {
     let cssSize = this.props.game.rows > this.props.game.cols ? this.props.game.rows : this.props.game.cols;
@@ -157,11 +161,4 @@ const mapStateToProps = (state: any) => {
   return state;
 };
 
-const actions: any = { start };
-
-const dispatchToProps = (dispatch: any) => {
-  const object: any = Object;
-  return object.assign({}, bindActionCreators(actions, dispatch), {dispatch});
-};
-
-export default connect(mapStateToProps, dispatchToProps)(GameLayout);
+export default connect(mapStateToProps, null)(GameLayout);
