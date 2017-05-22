@@ -146,7 +146,7 @@ const compressLine = (line: IField[],
   return [changed, added, points, line];
 };
 
-const makeMoveForDirection = (game: IReducedGame, direction: string): [IReducedGame, number] => {
+const makeMoveForDirection = (game: IReducedGame, direction: string): [IReducedGame, number, boolean] => {
   let points = 0;
   let changed = false;
   let squareBoard: IField[][] = [];
@@ -236,7 +236,7 @@ const makeMoveForDirection = (game: IReducedGame, direction: string): [IReducedG
   if (changed) {
     game = newSquare(game, newID(game, []));
   }
-  return [game, points];
+  return [game, points, changed];
 };
 
 const game = (state: IGame = initialState, action: any): IGame => {
@@ -253,6 +253,9 @@ const game = (state: IGame = initialState, action: any): IGame => {
       };
       const gameAfterMove = makeMoveForDirection(cloneDeep(reducedGame), direction);
       const newMoves = [...state.allMoves];
+      if (!gameAfterMove[2]) {
+        return state;
+      }
       newMoves.push(reducedGame);
       return {
         allMoves: newMoves,
