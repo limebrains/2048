@@ -1,7 +1,7 @@
 import { cloneDeep } from 'lodash';
 import {start, newID, newSquare} from '../actions/game';
 import {
-  DOWN, FETCH_GAME_SUCCESS, IField, IGame, IReducedGame, LEFT, MOVE, RIGHT, START, UNDO, UP,
+  DOWN, FETCH_ALL_GAMES_SUCCESS, FETCH_GAME_SUCCESS, IField, IGame, IReducedGame, LEFT, MOVE, RIGHT, START, UNDO, UP,
 } from '../constants';
 
 const initialState: IGame = {
@@ -312,6 +312,8 @@ const game = (state: IGame = initialState, action: any): IGame => {
         started = start(4, 4, 0);
       }
       return { ...state, ...started.payload, slugNotResolved };
+    case FETCH_ALL_GAMES_SUCCESS:
+      return { ...state, settings: action.payload.data };
     default:
       return state;
   }

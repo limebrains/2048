@@ -172,9 +172,6 @@ $portrait_size: 90vw;
       margin: 5px 5px 0 0;
     }
 
-    .score {
-      cursor: default;
-    }
   }
 
   .play {
@@ -184,7 +181,7 @@ $portrait_size: 90vw;
 
   .content {
     margin: auto;
-    width: 100vh;
+    overflow: hidden;
     max-width: 100%;
 
     .game_container {

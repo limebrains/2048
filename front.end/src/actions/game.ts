@@ -1,9 +1,11 @@
 import axios from 'axios';
 import {
-  FETCHING_GAME,
   FETCH_GAME_START,
   FETCH_GAME_ERROR,
   FETCH_GAME_SUCCESS,
+  FETCH_ALL_GAMES_START,
+  FETCH_ALL_GAMES_SUCCESS,
+  FETCH_ALL_GAMES_ERROR,
   IField,
   IGame,
   IReducedGame,
@@ -124,5 +126,32 @@ export const fetchGameError = (data: any) => {
   return {
     payload: data,
     type: FETCH_GAME_ERROR,
+  };
+};
+
+export const fetchAllGames = (dispatch: any) => {
+  axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
+  let request: any = axios.get(`http://127.0.0.1:8000/v1/game/?format=json`).then((success) => {
+    dispatch(fetchAllGamesSuccess(success));
+  }).catch((error) => {
+    dispatch(fetchAllGamesError(error));
+  });
+
+  return {
+    type: FETCH_ALL_GAMES_START,
+  };
+};
+
+export const fetchAllGamesSuccess = (data: any) => {
+  return {
+    payload: data,
+    type: FETCH_ALL_GAMES_SUCCESS,
+  };
+};
+
+export const fetchAllGamesError = (data: any) => {
+  return {
+    payload: data,
+    type: FETCH_ALL_GAMES_ERROR,
   };
 };
