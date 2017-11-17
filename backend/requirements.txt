@@ -1,0 +1,4 @@
+django==1.11.1
+djangorestframework==3.6.3
+django-extensions==1.7.9
+django-cors-headers==2.0.2

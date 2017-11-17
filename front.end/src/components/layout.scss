@@ -1,0 +1,392 @@
+@mixin transition($transition) {
+    -moz-transition:    $transition;
+    -o-transition:      $transition;
+    -webkit-transition: $transition;
+    transition:         $transition;
+}
+@mixin animation($animation) {
+  -webkit-animation: $animation;
+  -o-animation: $animation;
+  -moz-animation: $animation;
+  animation: $animation;
+}
+@mixin animation-fill-mode($animation) {
+  -webkit-animation-fill-mode: $animation;
+  -o-animation-fill-mode: $animation;
+  -moz-animation-fill-mode: $animation;
+  animation-fill-mode: $animation;
+}
+@mixin transition-property($transforms) {
+	   -moz-transition-property: -moz-#{$transforms};
+	     -o-transition-property: -o-#{$transforms};
+	-webkit-transition-property: -webkit-#{$transforms};
+          transition-property: $transforms;
+}
+@mixin transform($transforms) {
+	   -moz-transform: $transforms;
+	     -o-transform: $transforms;
+	-webkit-transform: $transforms;
+          transform: $transforms;
+}
+@mixin translate ($x, $y) {
+   @include transform(translate($x, $y));
+}
+$landscape_size: 80vh;
+$portrait_size: 90vw;
+
+$container_background_color: #776e65;
+
+$game_container_background_color: #bbada0;
+
+$field_text_color_black: #776e65;
+$field_text_color_white: #f9f6f2;
+
+$field_background_color_0: #cdc1b4;
+$field_background_color_2: #eee4da;
+$field_background_color_4: #ede0c8;
+$field_background_color_8: #f2b179;
+$field_background_color_16: #f59563;
+$field_background_color_32: #f67c5f;
+$field_background_color_64: #f65e3b;
+$field_background_color_128: #edcf72;
+$field_background_color_256: #edcc61;
+$field_background_color_512: #edc850;
+$field_background_color_1024: #edc53f;
+$field_background_color_2048: #edc22e;
+
+$game_over_background_color: rgba(238, 228, 218, 0.73);
+
+$min_size: 4;
+$max_size: 6;
+$field_position: (
+                (),
+                (0.0582, 0.5291, 1),
+                (0.0397, 0.3598, 0.6799, 1),
+                (0.03, 0.2725, 0.515, 0.7575, 1),
+                (0.0242, 0.2194, 0.4145, 0.6096, 0.8048, 1),
+                (0.0202, 0.1835, 0.3468, 0.5101, 0.6734, 0.8367, 1)
+);
+$field_sizes: (0, 0, 0, 0.2125, 0.171, 0.1431);
+$field_line_height: (0, 0, 0, 0.2125, 0.171, 0.1431);
+$field_font_size: (0, 0, 0, 0.11, 0.088, 0.074);
+$field_v_3_letters_font_size: (0, 0, 0, 0.09, 0.072, 0.06);
+$field_v_4_letters_font_size: (0, 0, 0, 0.07, 0.056, 0.047);
+
+
+@-webkit-keyframes fade-in {
+  0% {
+    opacity: 0; }
+
+  100% {
+    opacity: 1; } }
+@-moz-keyframes fade-in {
+  0% {
+    opacity: 0; }
+
+  100% {
+    opacity: 1; } }
+@keyframes fade-in {
+  0% {
+    opacity: 0; }
+
+  100% {
+    opacity: 1; } }
+
+@-webkit-keyframes appear {
+  0% {
+    opacity: 0;
+    -webkit-transform: scale(0);
+    -moz-transform: scale(0);
+    -ms-transform: scale(0);
+    transform: scale(0); }
+
+  100% {
+    opacity: 1;
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1); } }
+@-moz-keyframes appear {
+  0% {
+    opacity: 0;
+    -webkit-transform: scale(0);
+    -moz-transform: scale(0);
+    -ms-transform: scale(0);
+    transform: scale(0); }
+
+  100% {
+    opacity: 1;
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1); } }
+@keyframes appear {
+  0% {
+    opacity: 0;
+    -webkit-transform: scale(0);
+    -moz-transform: scale(0);
+    -ms-transform: scale(0);
+    transform: scale(0);
+    }
+
+  100% {
+    opacity: 1;
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1);
+    } }
+
+@-webkit-keyframes pop {
+  0% {
+    -webkit-transform: scale(0);
+    -moz-transform: scale(0);
+    -ms-transform: scale(0);
+    transform: scale(0); }
+
+  50% {
+    -webkit-transform: scale(1.2);
+    -moz-transform: scale(1.2);
+    -ms-transform: scale(1.2);
+    transform: scale(1.2); }
+
+  100% {
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1); } }
+@-moz-keyframes pop {
+  0% {
+    -webkit-transform: scale(0);
+    -moz-transform: scale(0);
+    -ms-transform: scale(0);
+    transform: scale(0); }
+
+  50% {
+    -webkit-transform: scale(1.2);
+    -moz-transform: scale(1.2);
+    -ms-transform: scale(1.2);
+    transform: scale(1.2); }
+
+  100% {
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1); } }
+@keyframes pop {
+  0% {
+    -webkit-transform: scale(0);
+    -moz-transform: scale(0);
+    -ms-transform: scale(0);
+    transform: scale(0); }
+
+  50% {
+    -webkit-transform: scale(1.2);
+    -moz-transform: scale(1.2);
+    -ms-transform: scale(1.2);
+    transform: scale(1.2); }
+
+  100% {
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1); } }
+
+body { margin: 0 }
+
+.container {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
+  font-size: 18px;
+  color: $container_background_color;
+
+  header {
+    text-align: center;
+    width: 100%;
+    margin-bottom: 5px;
+
+    button {
+      margin: 5px 5px 0 0;
+    }
+
+  }
+
+  .play {
+    margin: 10px;
+    width: 90%;
+  }
+
+  .content {
+    margin: auto;
+    overflow: hidden;
+    max-width: 100%;
+
+    .game_container {
+      margin: auto;
+      background: $game_container_background_color;
+      position: relative;
+      border-radius: 1.2%;
+
+      .v0 { z-index: 1; color: $field_text_color_black; background: $field_background_color_0; }
+      .v2 { z-index: 2; color: $field_text_color_black; background: $field_background_color_2; }
+      .v4 { z-index: 2; color: $field_text_color_black; background: $field_background_color_4; }
+      .v8 { z-index: 2; color: $field_text_color_white; background: $field_background_color_8; }
+      .v16 { z-index: 2; color: $field_text_color_white; background: $field_background_color_16; }
+      .v32 { z-index: 2; color: $field_text_color_white; background: $field_background_color_32; }
+      .v64 { z-index: 2; color: $field_text_color_white; background: $field_background_color_64; }
+      .v128 { z-index: 2; color: $field_text_color_white; background: $field_background_color_128; }
+      .v256 { z-index: 2; color: $field_text_color_white; background: $field_background_color_256; }
+      .v512 { z-index: 2; color: $field_text_color_white; background: $field_background_color_512; }
+      .v1024 { z-index: 2; color: $field_text_color_white; background: $field_background_color_1024; }
+      .v2048 { z-index: 2; color: $field_text_color_white; background: $field_background_color_2048; }
+
+      .game_over {
+        z-index: 3;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: $game_over_background_color;
+        overflow: hidden;
+        text-align: center;
+        font-weight: bold;
+        @include animation(fade-in 800ms ease 1200ms);
+        @include animation-fill-mode(both);
+      }
+    }
+  }
+
+  .born {
+    @include animation(appear 200ms ease 100ms);
+    @include animation-fill-mode(backwards);
+  }
+
+  .merged {
+    z-index: 2;
+    @include animation(pop 200ms ease 100ms);
+    @include animation-fill-mode(backwards);
+  }
+
+  .field {
+    position: absolute;
+    overflow: hidden;
+    text-align: center;
+    font-weight: bold;
+    @include transition-property(transform);
+    @include transition(100ms ease-in-out);
+  }
+
+  @media all and (orientation:landscape) {
+    @for $i from 2 through $max_size {
+      @for $j from 2 through $max_size {
+        .game_container_at_#{$i}_by_#{$j} {
+          @if $i > $j {
+            width: nth(nth($field_position, $i), $j + 1) * $landscape_size;
+            height: nth(nth($field_position, $i), $i + 1) * $landscape_size;
+          } @else {
+            width: nth(nth($field_position, $j), $j + 1) * $landscape_size;
+            height: nth(nth($field_position, $j), $i + 1) * $landscape_size;
+          }
+        }
+      }
+    }
+
+    @for $i from 2 through $max_size {
+      @for $j from 2 through $max_size {
+        .game_over_at_#{$i}_by_#{$j} {
+          @if $i > $j {
+            line-height: $landscape_size;
+          } @else {
+            line-height: nth(nth($field_position, $j), $i + 1) * $landscape_size;
+          }
+        }
+      }
+    }
+
+    @for $i from $min_size through $max_size {
+      .field_at_#{$i} {
+        line-height: nth($field_line_height, $i) * $landscape_size;
+        font-size: nth($field_font_size, $i) * $landscape_size;
+        width: nth($field_sizes, $i) * $landscape_size;
+        height: nth($field_sizes, $i) * $landscape_size;
+      }
+    }
+
+    @for $i from $min_size through $max_size {
+      .v128_at_#{$i} { font-size: nth($field_v_3_letters_font_size, $i) * $landscape_size }
+      .v256_at_#{$i} { font-size: nth($field_v_3_letters_font_size, $i) * $landscape_size }
+      .v512_at_#{$i} { font-size: nth($field_v_3_letters_font_size, $i) * $landscape_size }
+      .v1024_at_#{$i} { font-size: nth($field_v_4_letters_font_size, $i) * $landscape_size }
+      .v2048_at_#{$i} { font-size: nth($field_v_4_letters_font_size, $i) * $landscape_size }
+
+      @for $j from 0 through $i - 1 {
+        @for $k from 0 through $i - 1 {
+          .game_grid_#{$j}_#{$k}_at_#{$i} {
+            left: nth(nth($field_position, $i), $k + 1) * $landscape_size;
+            top: nth(nth($field_position, $i), $j + 1) * $landscape_size;
+          }
+        }
+      }
+    }
+
+  }
+
+  @media all and (orientation:portrait) {
+    @for $i from 2 through $max_size {
+      @for $j from 2 through $max_size {
+        .game_container_at_#{$i}_by_#{$j} {
+          @if $i > $j {
+            width: nth(nth($field_position, $i), $j + 1) * $portrait_size;
+            height: nth(nth($field_position, $i), $i + 1) * $portrait_size;
+          } @else {
+            width: nth(nth($field_position, $j), $j + 1) * $portrait_size;
+            height: nth(nth($field_position, $j), $i + 1) * $portrait_size;
+          }
+        }
+      }
+    }
+
+    @for $i from 2 through $max_size {
+      @for $j from 2 through $max_size {
+        .game_over_at_#{$i}_by_#{$j} {
+          @if $i > $j {
+            line-height: $portrait_size;
+          } @else {
+            line-height: nth(nth($field_position, $j), $i + 1) * $portrait_size;
+          }
+        }
+      }
+    }
+
+    @for $i from $min_size through $max_size {
+      .field_at_#{$i} {
+        line-height: nth($field_line_height, $i) * $portrait_size;
+        font-size: nth($field_font_size, $i) * $portrait_size;
+        width: nth($field_sizes, $i) * $portrait_size;
+        height: nth($field_sizes, $i) * $portrait_size;
+      }
+    }
+
+    @for $i from $min_size through $max_size {
+      .v128_at_#{$i} { font-size: nth($field_v_3_letters_font_size, $i) * $portrait_size }
+      .v256_at_#{$i} { font-size: nth($field_v_3_letters_font_size, $i) * $portrait_size }
+      .v512_at_#{$i} { font-size: nth($field_v_3_letters_font_size, $i) * $portrait_size }
+      .v1024_at_#{$i} { font-size: nth($field_v_4_letters_font_size, $i) * $portrait_size }
+      .v2048_at_#{$i} { font-size: nth($field_v_4_letters_font_size, $i) * $portrait_size }
+
+      @for $j from 0 through $i - 1 {
+        @for $k from 0 through $i - 1 {
+          .game_grid_#{$j}_#{$k}_at_#{$i} {
+            left: nth(nth($field_position, $i), $k + 1) * $portrait_size;
+            top: nth(nth($field_position, $i), $j + 1) * $portrait_size;
+          }
+        }
+      }
+    }
+
+  }
+}
